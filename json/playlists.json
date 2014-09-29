@@ -2,14 +2,14 @@
 	"playlists":[
 	{
 		"name":"Sample Playlist 1",
-		"url":"/json/playlists/playlist1.json"
+		"url":"json/playlists/playlist1.json"
 	},
 	{
 		"name":"Sample Playlist 2",
-		"url":"/json/playlists/playlist2.json"
+		"url":"json/playlists/playlist2.json"
 	},
     {
 		"name":"Sample Playlist 3",
-		"url":"/json/playlists/playlist3.json"
+		"url":"json/playlists/playlist3.json"
 	}]
 }

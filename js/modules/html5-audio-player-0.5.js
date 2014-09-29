@@ -3,7 +3,7 @@
  *
  * Designed to play any supported audio type.
  *
- * @copyright © 2014 Clif Jackson
+ * @copyright © 2013 Clif Jackson
  * @package HTML5 JavaScript Audio Player
  * @version 0.5
  */
@@ -387,9 +387,9 @@ D.debug('Browser says it can "'  + ans + '" play: ' + _audio_codecs[x][xx]);
 			function _handleTimeUpdateEvent(e)
 			{
 				// Calculate & set play time display counting backwards
-				var dur = this.duration,
-				time = this.currentTime,
-				totalSecondsRemaining = parseInt(dur - time, 10);
+				var dur = this.duration;
+				var time = this.currentTime;
+				var totalSecondsRemaining = parseInt(dur - time, 10);
 
 				if (!isNaN(totalSecondsRemaining))
 				{

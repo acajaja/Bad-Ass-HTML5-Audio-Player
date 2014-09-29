@@ -1,22 +1,50 @@
 {
 	"playlist":
 	{
-		"name": "East 3rd Street Ensemble Samples",
+		"name": "Samples Playlist 1",
 		"tracks":
 		[
 			{
-				"copyright":"2007 East 3rd Street Ensemble",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/East_Third_Street/2_21_07_Fmix_ex1_web1.mp3",
-				"info":"",
+				"copyright":"",
+				"path":"mp3/Aggressive Motorcycle.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
 				"mime":"audio/mpeg",
-				"title":"Track 1"
+				"title":"Aggressive Motorcycle"
 			},
 			{
-				"copyright":"2007 East 3rd Street Ensemble",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/East_Third_Street/Jan_07_Misc1_final1_ex1_web1.mp3",
-				"info":"",
+				"copyright":"",
+				"path":"mp3/Battle Crowd Celebrate Stutter.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
 				"mime":"audio/mpeg",
-				"title":"Track 2"
+				"title":"Battle Crowd Celebrate Stutter"
+			},
+			{
+				"copyright":"",
+				"path":"mp3/Car Through Icy Puddle.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Car Through Icy Puddle"
+			},
+			{
+				"copyright":"",
+				"path":"mp3/Clunky Old Engine.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Clunky Old Engine"
+			},
+			{
+				"copyright":"",
+				"path":"mp3/Concussive Hit Guitar Boing.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Concussive Hit Guitar Boing"
+			},
+			{
+				"copyright":"",
+				"path":"mp3/Crowd Talking.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Crowd Talking"
 			}
 		]
 	}
