@@ -1,0 +1,23 @@
+{
+	"playlist":
+	{
+		"name": "East 3rd Street Ensemble Samples",
+		"tracks":
+		[
+			{
+				"copyright":"2007 East 3rd Street Ensemble",
+				"path":"http://media.clifjackson.net/audio/mp3/excerpts/East_Third_Street/2_21_07_Fmix_ex1_web1.mp3",
+				"info":"",
+				"mime":"audio/mpeg",
+				"title":"Track 1"
+			},
+			{
+				"copyright":"2007 East 3rd Street Ensemble",
+				"path":"http://media.clifjackson.net/audio/mp3/excerpts/East_Third_Street/Jan_07_Misc1_final1_ex1_web1.mp3",
+				"info":"",
+				"mime":"audio/mpeg",
+				"title":"Track 2"
+			}
+		]
+	}
+}
