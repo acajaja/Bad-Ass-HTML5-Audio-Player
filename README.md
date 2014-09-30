@@ -39,10 +39,15 @@ Known Bugs:
 Directory Structure
 ==========================
 / - webroot
+
     /js
+
         /js/modules - development files
+
             /js/modules/minified - minified production files
+
     /json - sample playlists
+
     /mp3 - sample mp3 files
 
 How-To
