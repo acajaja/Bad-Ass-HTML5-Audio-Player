@@ -70,3 +70,16 @@ The player root node has the data- attribute data-setup='{"playlists":"json/play
 That's about it! Super simple set up.
 
 Load up your page, choose a playlist and hit play!
+
+##Functionality
+
+The player has the following features/functions:
+
+- play/pause button
+- previous track multi tap button: 1 tap = go to beginning of current track. 2 taps = go to previous track.
+- next track button
+- autoplay button: player keeps playing all tracks in playlist until stopped.
+- playlists button: load all playlists
+- volume button: tap to open volume slider. also contains a mute button.
+- info button: if a track contains information about it this button will be enabled when the track is selected.
+- time/progress display: displays elapsed & remaining time along with slider for current position & audio scrubbing.
