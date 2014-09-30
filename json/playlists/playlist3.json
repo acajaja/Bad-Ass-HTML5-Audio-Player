@@ -1,22 +1,50 @@
 {
 	"playlist":
 	{
-		"name": "East 3rd Street Ensemble Samples",
+		"name": "Sample Playlist 3",
 		"tracks":
 		[
 			{
-				"copyright":"2007 East 3rd Street Ensemble",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/East_Third_Street/2_21_07_Fmix_ex1_web1.mp3",
-				"info":"",
+				"copyright":"",
+				"path":"mp3/Mumbai_Effect.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
 				"mime":"audio/mpeg",
-				"title":"Track 1"
+				"title":"Mumbai_Effect"
 			},
-			{
-				"copyright":"2007 East 3rd Street Ensemble",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/East_Third_Street/Jan_07_Misc1_final1_ex1_web1.mp3",
-				"info":"",
+            {
+				"copyright":"",
+				"path":"mp3/Radio Static.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
 				"mime":"audio/mpeg",
-				"title":"Track 2"
+				"title":"Radio Static"
+			},
+            {
+				"copyright":"",
+				"path":"mp3/Suns_Rise.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Suns_Rise"
+			},
+            {
+				"copyright":"",
+				"path":"mp3/Team Cheer.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Team Cheer"
+			},
+            {
+				"copyright":"",
+				"path":"mp3/Thunder Crack.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Thunder Crack"
+			},
+            {
+				"copyright":"",
+				"path":"mp3/Voice On Radio Accent.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Voice On Radio Accent"
 			}
 		]
 	}

@@ -1,22 +1,43 @@
 {
 	"playlist":
 	{
-		"name": "East 3rd Street Ensemble Samples",
+		"name": "Sample Playlist 2",
 		"tracks":
 		[
 			{
-				"copyright":"2007 East 3rd Street Ensemble",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/East_Third_Street/2_21_07_Fmix_ex1_web1.mp3",
-				"info":"",
+				"copyright":"",
+				"path":"mp3/Crows Caw in Field.mp3.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
 				"mime":"audio/mpeg",
-				"title":"Track 1"
+				"title":"Crows Caw in Field"
 			},
-			{
-				"copyright":"2007 East 3rd Street Ensemble",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/East_Third_Street/Jan_07_Misc1_final1_ex1_web1.mp3",
-				"info":"",
+            {
+				"copyright":"",
+				"path":"mp3/Distant Dog Barking.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
 				"mime":"audio/mpeg",
-				"title":"Track 2"
+				"title":"Distant Dog Barking"
+			},
+            {
+				"copyright":"",
+				"path":"mp3/Extinction_Level_Event.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Extinction_Level_Event"
+			},
+            {
+				"copyright":"",
+				"path":"mp3/Horse and Carriage.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Horse and Carriage"
+			},
+            {
+				"copyright":"",
+				"path":"mp3/Lindyhop.mp3",
+				"info":"Audio samples free from https://www.youtube.com/audiolibrary",
+				"mime":"audio/mpeg",
+				"title":"Lindyhop"
 			}
 		]
 	}
