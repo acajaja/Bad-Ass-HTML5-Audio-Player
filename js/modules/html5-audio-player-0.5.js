@@ -12,6 +12,8 @@ define(
 ["mods/debugger","dojo/_base/xhr"],
 function(D,xhr)
 {
+    D.enableDebug();
+
 	/**
 	 * Constructor function
 	 *
@@ -573,7 +575,6 @@ D.debug('Removing classes...');
 			 */
 			this.init = function()
 			{
-D.enableDebug();
 D.debug('Initialize HTML5 Audio Player...');
 				try {
 					if (!_html5_support)

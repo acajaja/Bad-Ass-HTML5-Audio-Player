@@ -7,6 +7,7 @@ function()
     {
         var _DEBUG = false;
         var _HASCONSOLE = typeof console != 'undefined' ? true : false;
+        var _SELF = this;
 
         this.debug = function()
         {
@@ -17,11 +18,15 @@ function()
         };
         this.disableDebug = function()
         {
-            _DEBUG = false;
+            _SELF.setDebug(false);
         };
         this.enableDebug = function()
         {
-            _DEBUG = true;
+            _SELF.setDebug(true);
+        };
+        this.setDebug = function(onOff)
+        {
+            _DEBUG = onOff;
         };
 
         function _debug()
