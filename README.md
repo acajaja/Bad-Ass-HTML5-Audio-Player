@@ -21,8 +21,7 @@ Remember: separation of concerns!
 
 http://www.clifjackson.net/music/audio
 
-Known Bugs:
---------------------------
+##Known Bugs:
 
 1. Issue with going back to the playlists menu while audio still playing. 
 - Status: needs further debugging to locate the problem(s).
@@ -36,9 +35,10 @@ Known Bugs:
     5. wait a sec and then un-mute.
     6. check if the volume seems significantly higher.
 
-Directory Structure
---------------------------
-```/ - webroot
+##Directory Structure
+
+```
+/ - webroot
 
     /js
 
@@ -51,8 +51,7 @@ Directory Structure
     /mp3 - sample mp3 files
 ```
 
-How-To
---------------------------
+##How-To
 
 /index.html contains the HTML used for the player and the JavaScript to load it. You can have multiple players on one page by either copying the HTML directly for each player or by using JavaScript to clone the player and generate new instances dynamically.
 
