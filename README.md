@@ -53,19 +53,17 @@ http://www.clifjackson.net/music/audio
 
 ##How-To
 
-###/index.html
+#####/index.html
 
-the HTML used for the player and the JavaScript to load it. You can have multiple players on one page by either copying the HTML directly for each player or by using JavaScript to clone the player and generate new instances dynamically.
+the HTML used for the player and the JavaScript to load it. You can have multiple players on one page by either copying the HTML directly for each player or by using JavaScript to clone the player and generate new instances dynamically. The player root node has the data- attribute data-setup='{"playlists":"json/playlists.json"}'. Set this to wherever you need to.
 
-/js/modules/html5-audio-player-0.5.js
+#####/js/modules/html5-audio-player-0.5.js
 
 player module development code. It is meant to be minified. You could even take out all the debugging pretty easily if you cared.
 
-/js/modules/debugger.js
+#####/js/modules/debugger.js
 
 used to debug the code. It is enabled so to disable it go to line 15 of the player module and comment out "D.enableDebug();"
-
-The player root node has the data- attribute data-setup='{"playlists":"json/playlists.json"}'. Set this to wherever you need to.
 
 That's about it! Super simple set up.
 
