@@ -77,7 +77,7 @@ The player has the following features/functions:
 - previous track multi tap button: 1 tap = go to beginning of current track. 2 taps = go to previous track.
 - next track button
 - autoplay button: player keeps playing all tracks in playlist until stopped.
-- playlists button: load all playlists
+- playlists button: load all playlists, stop audio and reset and disable player controls.
 - volume button: tap to open volume slider. also contains a mute button.
 - info button: if a track contains information about it this button will be enabled when the track is selected.
 - time/progress display: displays elapsed & remaining time along with slider for current position & audio scrubbing.
