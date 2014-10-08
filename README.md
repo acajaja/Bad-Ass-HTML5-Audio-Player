@@ -13,11 +13,13 @@ Subsequent releases will have the option to configure single or multi playlist m
 
 Because compatibility and compliance is getting better, the player is written almost purely in JavaScript and intended to be used as a module (AMD). I only use Dojo to facilitate the use of AMD and for the AJAX calls. Furthermore, you can create custom builds of Dojo with only the base library and any other modules your code uses.
 
-Therefore, this player will only work in the current browser versions and maybe 1 version back as of this publication date.
+This player will only work in the current browser versions and 1 version back as of this publication date.
 
-I also don't like to write HTML with my JavaScript. It's just ugleh! This way, you can actually change the structure of the HTML--as long you keep the same classes & id's--without affecting the functionality. I did this for my own site for the desktop & mobile versions of the player. Using mobile detection on the back end, I render a different view for mobile.
+I also don't like to write HTML with my JavaScript. It's just ugleh! This way, you can actually change the structure of the HTML to suit your needs--as long you keep the same classes & id's--without affecting the functionality. It makes it really easy to create custom skins. I did this for my own site for the desktop & mobile versions of the player. Using mobile detection on the back end, I render a different view for mobile.
 
 Remember: separation of concerns!
+
+Live working example:
 
 http://www.clifjackson.net/music/audio
 
@@ -53,7 +55,7 @@ http://www.clifjackson.net/music/audio
 
 ##How-To
 
-/index.html
+###/index.html
 
 the HTML used for the player and the JavaScript to load it. You can have multiple players on one page by either copying the HTML directly for each player or by using JavaScript to clone the player and generate new instances dynamically.
 
