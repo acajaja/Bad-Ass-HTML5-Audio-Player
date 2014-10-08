@@ -23,11 +23,9 @@ http://www.clifjackson.net/music/audio
 
 ##Known Bugs:
 
-1. Issue with going back to the playlists menu while audio still playing. 
-- Status: needs further debugging to locate the problem(s).
+1. Issue with going back to the playlists menu while audio still playing. Status: needs further debugging to locate the problem(s).
 
-2. I think Webkit on certain mobile devices may be doing weird stuff with the volume/mute stuff.
-- Steps to reproduce:
+2. I think Webkit on certain mobile devices may be doing weird stuff with the volume/mute stuff. Steps to reproduce:
     1. load the player
     2. choose a playlist
     3. don't do anything except play a track.
