@@ -67,6 +67,8 @@ That's about it! Super simple set up.
 
 Load up your page, choose a playlist and hit play!
 
+See /json/*.json for examples of playlist structure/syntax.
+
 ##Functionality
 
 The player has the following features/functions:
