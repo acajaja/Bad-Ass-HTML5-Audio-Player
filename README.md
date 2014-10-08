@@ -7,13 +7,11 @@ http://sandboxes.jazzopetry.net/Bad-Ass-HTML5-Audio-Player/
 
 Well, maybe it's not so bad ass, but I really like HTML5 audio and wanted a versatile player for my web site.
 
-The player is designed to use multiple playlists. So the first call is to a playlist of playlists. From there, the user can load one and play the tracks on it.
+The player is designed to use multiple playlists. So the first call is to a playlist of playlists. From there, the user can load one and play the tracks on it. This player will only work in the current browser versions and 1 version back as of this publication date.
 
 Subsequent releases will have the option to configure single or multi playlist mode.
 
 Because compatibility and compliance is getting better, the player is written almost purely in JavaScript and intended to be used as a module (AMD). I only use Dojo to facilitate the use of AMD and for the AJAX calls. Furthermore, you can create custom builds of Dojo with only the base library and any other modules your code uses.
-
-This player will only work in the current browser versions and 1 version back as of this publication date.
 
 I also don't like to write HTML with my JavaScript. It's just ugleh! This way, you can actually change the structure of the HTML to suit your needs--as long you keep the same classes & id's--without affecting the functionality. It makes it really easy to create custom skins. I did this for my own site for the desktop & mobile versions of the player. Using mobile detection on the back end, I render a different view for mobile.
 
