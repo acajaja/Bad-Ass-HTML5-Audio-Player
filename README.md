@@ -1,10 +1,6 @@
 Bad-Ass-HTML5-Audio-Player
 ==========================
 
-Unstyled working example:
-
-http://sandboxes.jazzopetry.net/Bad-Ass-HTML5-Audio-Player/
-
 Well, maybe it's not so bad ass, but I really like HTML5 audio and wanted a versatile player for my web site.
 
 The player is designed to use multiple playlists. So the first call is to a playlist of playlists. From there, the user can load one and play the tracks on it. This player will only work in the current browser versions and 1 version back as of this publication date.
