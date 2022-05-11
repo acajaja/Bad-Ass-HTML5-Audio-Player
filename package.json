@@ -1,0 +1,31 @@
+{
+  "name": "bad-ass-html5-audio-player",
+  "version": "0.6",
+  "author": "Clif Jackson",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": "16.x",
+    "npm": "8.x"
+  },
+  "scripts": {
+    "build:dev": "NODE_ENV=development webpack",
+    "build:prod": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=development nodemon -w ./src -w ./public -V ./server.js",
+    "test": "NODE_ENV=test jest --watch"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.4",
+    "babel-plugin-rewire": "^1.2.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jest": "^27.5.1",
+    "jest-environment-jsdom": "^27.5.1",
+    "jsdom": "^19.0.0",
+    "nodemon": "^2.0.15",
+    "regenerator-runtime": "^0.13.9",
+    "webpack-cli": "^4.9.2",
+    "webpack-obfuscator": "^3.5.1"
+  }
+}

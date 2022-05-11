@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<title>Bad Ass Web Audio Player</title>
+<meta charset="UTF-8">
+<script src="/js/WebAudioPlayer/WebAudioPlayer.init.js" type="module"></script>
+</head>
+
+<body>
+
+<div class="html5-audio-player my-minidisk-skin" id="my-boom-box">
+    <div class="player-bg-box">
+        <div class="outer-circle-bg"></div>
+        <div class="outer-circle-frame"></div>
+        <div class="play-stop-bg-box"></div>
+        <div class="white-circle"></div>
+        <div class="user-screen-bg"></div>
+    </div>
+    <div class="player-controls-box">
+        <div class="play-stop-btn-box">
+            <button class="play-btn" title="Play Audio">
+                <span></span>
+            </button>
+        </div>
+        <div class="round-buttons">
+            <div class="autoplay-btn-box">
+                <p>autoplay</p>
+                <button class="autoplay-btn" title="Autoplay"></button>
+            </div>
+            <div class="playlist-btn-box">
+                <p>playlists</p>
+                <button class="playlist-btn" title="Playlists">
+                    <span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+            </div>
+            <div class="volume-button-box">
+                <p>volume</p>
+                <button class="volume-button" title="?????"></button>
+            </div>
+        </div>
+        <div class="time-progress-display">
+            <div class="current-time time-displays">00:00</div>
+            <div class="remaining-time time-displays">00:00</div>
+            <div class="loading-progress-track">
+                <div class="loading-bar"></div>
+            </div>
+            <input class="range-input seek-handle-box" min="0" max="" type="range" title="Audio Position">
+        </div>
+        <div class="track-buttons-box">
+            <button class="prev-track-btn" title="Previous Track"></button>
+            <button class="next-track-btn" title="Next Track"></button>
+        </div>
+    </div>
+    <div class="user-screen">
+        <div class="screen-header-box">
+            <p class="screen-title"><strong>Playlists</strong></p>
+        </div>
+        <div class="playlist-container">
+            <div class="playlist-container-overflow">
+                <ol class="playlist-scroll-box"></ol>
+            </div>
+            <div class="info-screen">
+                <div class="info-scroll-overflow">
+                    <div class="info-content-box"></div>
+                </div>
+            </div>
+            <div class="net-stat-box"></div>
+        </div>
+        <div class="info-button-box">
+            <button class="info-button" title="Playlist Info">i</button>
+        </div>
+    </div>
+    <div class="volume-slider-mute-box">
+        <input class="range-input volume-slider" max="1" min="0" orient="vertical" step="0.05" type="range" title="Volume">
+        <button class="mute-button" title="Mute Audio">M</button>
+    </div>
+    <div class="player-logo">
+        <p>Logo</p>
+    </div>
+</div>
+
+</body>
+</html>
