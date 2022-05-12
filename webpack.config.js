@@ -22,7 +22,7 @@ module.exports = (env, argv) => {
   let baseConfig = {
     devtool: isProd ? 'source-map' : 'inline-source-map',
     mode: process.env.NODE_ENV,
-    entry: ["regenerator-runtime/runtime.js", `${baseJsDir}/init.js`],
+    entry: ["regenerator-runtime/runtime.js", `${baseJsDir}/WebAudioPlayer.js`],
     output: {
       /////////////////////
       // Deletes everything

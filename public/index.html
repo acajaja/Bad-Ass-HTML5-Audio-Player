@@ -1,9 +1,42 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-<title>Bad Ass Web Audio Player</title>
 <meta charset="UTF-8">
-<script src="/js/WebAudioPlayer/WebAudioPlayer.init.js" type="module"></script>
+<title>Bad Ass Web Audio Player</title>
+<script type="module">
+import { startup } from './js/WebAudioPlayer/WebAudioPlayer.js'
+const audio = startup('my-boom-box')
+</script>
+<style type="text/css">
+html {
+    font-size: 62.5%;
+    margin: 0;
+    padding: 0;
+}
+.html5-audio-player,
+button,
+input {
+    font-size: 2rem;
+}
+.volume-slider-mute-box {
+    display: grid;
+    grid-template-columns: 40px;
+    grid-template-rows: 160px 40px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    width: 160px;
+}
+.range-input.volume-slider {
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    width: 160px;
+
+    transform-origin: 80px 80px;
+    transform: rotate(-90deg) translateY(10px);
+}
+</style>
 </head>
 
 <body>
@@ -39,7 +72,7 @@
             </div>
             <div class="volume-button-box">
                 <p>volume</p>
-                <button class="volume-button" title="?????"></button>
+                <button class="volume-button" title="Show/Hide Volume Control"></button>
             </div>
         </div>
         <div class="time-progress-display">
@@ -75,7 +108,7 @@
         </div>
     </div>
     <div class="volume-slider-mute-box">
-        <input class="range-input volume-slider" max="1" min="0" orient="vertical" step="0.05" type="range" title="Volume">
+        <input class="range-input volume-slider" max="1" min="0" step="0.05" type="range" title="Volume">
         <button class="mute-button" title="Mute Audio">M</button>
     </div>
     <div class="player-logo">

@@ -1,38 +1,35 @@
 {
-	"playlist":
-	{
-		"name": "Prajna Samples",
-		"info": "",
-		"tracks":
-		[
-			{
-				"copyright":"2003 Clif Jackson",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/Prajna/Milf-Malf_take2_mixB_web1.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Milf-Malf"
-			},
-			{
-				"copyright":"2003 Clif Jackson",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/Prajna/Passions_take1_mixD_web1.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Passions of Humanity"
-			},
-			{
-				"copyright":"2003 Clif Jackson",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/Prajna/Qi_take3_New1ab_web1.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Qi"
-			},
-			{
-				"copyright":"2003 Clif Jackson",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/Prajna/Wee-Yaw_take2_mixCa.2_web1.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Wee-Yaw"
-			}
-		]
-	}
+	"name": "Prajna Samples",
+	"info": "",
+	"tracks":
+	[
+		{
+			"copyright":"2003 Clif Jackson",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/Prajna/Milf-Malf_take2_mixB_web1.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Milf-Malf"
+		},
+		{
+			"copyright":"2003 Clif Jackson",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/Prajna/Passions_take1_mixD_web1.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Passions of Humanity"
+		},
+		{
+			"copyright":"2003 Clif Jackson",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/Prajna/Qi_take3_New1ab_web1.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Qi"
+		},
+		{
+			"copyright":"2003 Clif Jackson",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/Prajna/Wee-Yaw_take2_mixCa.2_web1.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Wee-Yaw"
+		}
+	]
 }

@@ -1,38 +1,35 @@
 {
-	"playlist":
-	{
-		"name": "1975: An Underground Epic Samples",
-		"info": "",
-		"tracks":
-		[
-			{
-				"copyright":"",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/1975/1975_Intro_web1.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Introduction"
-			},
-			{
-				"copyright":"",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/1975/1975_web2.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Track 2"
-			},
-			{
-				"copyright":"",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/1975/1975_web3.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Track 3"
-			},
-			{
-				"copyright":"",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/1975/1975_web4.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Track 4"
-			}
-		]
-	}
+	"name": "1975: An Underground Epic Samples",
+	"info": "",
+	"tracks":
+	[
+		{
+			"copyright":"",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/1975/1975_Intro_web1.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Introduction"
+		},
+		{
+			"copyright":"",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/1975/1975_web2.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Track 2"
+		},
+		{
+			"copyright":"",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/1975/1975_web3.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Track 3"
+		},
+		{
+			"copyright":"",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/1975/1975_web4.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Track 4"
+		}
+	]
 }

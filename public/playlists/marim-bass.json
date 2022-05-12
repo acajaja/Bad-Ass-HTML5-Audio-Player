@@ -1,38 +1,35 @@
 {
-	"playlist":
-	{
-		"name": "Marim-bass Samples",
-		"info": "",
-		"tracks":
-		[
-			{
-				"copyright":"",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/Marim-bass/El_Jarabe_de_la_Botella_web1.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"El Jarabe de la Botella"
-			},
-			{
-				"copyright":"",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/Marim-bass/Negra_de_Mi_Vida.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Negra de Mi Vida"
-			},
-			{
-				"copyright":"",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/Marim-bass/Quien_Sera_web1.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Quien Sera"
-			},
-			{
-				"copyright":"",
-				"path":"http://media.clifjackson.net/audio/mp3/excerpts/Marim-bass/Tehuan_Tepec_web1.mp3",
-				"info":"",
-				"mime":"audio/mpeg",
-				"title":"Tehuan Tepec"
-			}
-		]
-	}
+	"name": "Marim-bass Samples",
+	"info": "",
+	"tracks":
+	[
+		{
+			"copyright":"",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/Marim-bass/El_Jarabe_de_la_Botella_web1.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"El Jarabe de la Botella"
+		},
+		{
+			"copyright":"",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/Marim-bass/Negra_de_Mi_Vida.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Negra de Mi Vida"
+		},
+		{
+			"copyright":"",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/Marim-bass/Quien_Sera_web1.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Quien Sera"
+		},
+		{
+			"copyright":"",
+			"path":"http://media.clifjackson.net/audio/mp3/excerpts/Marim-bass/Tehuan_Tepec_web1.mp3",
+			"info":"",
+			"mime":"audio/mpeg",
+			"title":"Tehuan Tepec"
+		}
+	]
 }

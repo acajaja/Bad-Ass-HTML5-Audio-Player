@@ -1,6 +1,8 @@
 import { init } from './WebAudioPlayer.js';
 
-window.onload = (e) => {
+const la = (e) => {
     const playerNode = document.getElementById('my-boom-box');
     init(playerNode);
 }
+
+window.document.addEventListener('DOMContentLoaded', la);
