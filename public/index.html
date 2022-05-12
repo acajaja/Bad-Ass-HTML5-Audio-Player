@@ -10,8 +10,22 @@ const audio = startup('my-boom-box')
 <style type="text/css">
 html {
     font-size: 62.5%;
+}
+html, body {
     margin: 0;
     padding: 0;
+}
+body {
+    padding: 25px 100px;
+}
+button {
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0;
+    min-height: 25px;
+    min-width: 25px;
+    padding: 0.4rem 0.8rem;
 }
 .html5-audio-player,
 button,
@@ -19,7 +33,7 @@ input {
     font-size: 2rem;
 }
 .volume-slider-mute-box {
-    display: grid;
+    display: none;
     grid-template-columns: 40px;
     grid-template-rows: 160px 40px;
     height: 20px;
@@ -35,6 +49,13 @@ input {
 
     transform-origin: 80px 80px;
     transform: rotate(-90deg) translateY(10px);
+}
+.volume-slider-mute-box.play {
+    display: grid;
+}
+li.current button {
+    background-color: palegreen;
+    font-style: italic;
 }
 </style>
 </head>
