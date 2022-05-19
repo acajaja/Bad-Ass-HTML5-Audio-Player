@@ -4,7 +4,8 @@
 </head>
 
 <body>
-<div class="html5-audio-player my-minidisk-skin" id="my-boom-box" data-setup='{"playlist":"/playlists.json"}'>
+
+<div class="web-audio-player my-minidisk-skin" id="my-boom-box">
     <div class="player-bg-box">
         <div class="outer-circle-bg"></div>
         <div class="outer-circle-frame"></div>
@@ -14,18 +15,18 @@
     </div>
     <div class="player-controls-box">
         <div class="play-stop-btn-box">
-            <button class="play-btn">
+            <button class="play-btn" title="Play Audio">
                 <span></span>
             </button>
         </div>
         <div class="round-buttons">
             <div class="autoplay-btn-box">
                 <p>autoplay</p>
-                <button class="autoplay-btn"></button>
+                <button class="autoplay-btn" title="Autoplay"></button>
             </div>
             <div class="playlist-btn-box">
                 <p>playlists</p>
-                <button class="playlist-btn">
+                <button class="playlist-btn" title="Playlists">
                     <span>
                         <span></span>
                         <span></span>
@@ -35,7 +36,7 @@
             </div>
             <div class="volume-button-box">
                 <p>volume</p>
-                <button class="volume-button"></button>
+                <button class="volume-button" title="Show/Hide Volume Control"></button>
             </div>
         </div>
         <div class="time-progress-display">
@@ -44,11 +45,11 @@
             <div class="loading-progress-track">
                 <div class="loading-bar"></div>
             </div>
-            <input class="range-input seek-handle-box" min="0" max="" type="range">
+            <input class="range-input seek-handle-box" min="0" max="" type="range" title="Audio Position">
         </div>
         <div class="track-buttons-box">
-            <button class="prev-track-btn"></button>
-            <button class="next-track-btn"></button>
+            <button class="prev-track-btn" title="Previous Track"></button>
+            <button class="next-track-btn" title="Next Track"></button>
         </div>
     </div>
     <div class="user-screen">
@@ -67,16 +68,15 @@
             <div class="net-stat-box"></div>
         </div>
         <div class="info-button-box">
-            <button class="info-button">i</button>
+            <button class="info-button" title="Playlist Info">i</button>
         </div>
     </div>
     <div class="volume-slider-mute-box">
-        <input class="range-input volume-slider" max="1" min="0" orient="vertical" step="0.05" type="range">
-        <button class="mute-button">M</button>
+        <input class="range-input volume-slider" max="1" min="0" step="0.05" type="range" title="Volume">
+        <button class="mute-button" title="Mute Audio">M</button>
     </div>
     <div class="player-logo">
-        <p>CJ3</p>
-        <p>Audio</p>
+        <p>Logo</p>
     </div>
 </div>
 
