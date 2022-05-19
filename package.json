@@ -12,9 +12,10 @@
     "build:dev": "./scripts/build.sh",
     "build:prod": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development nodemon -w ./src -w ./public -V ./server.js",
-    "test": "NODE_ENV=test jest --watch"
+    "test": "NODE_ENV=test jest --watch --detectOpenHandles"
   },
   "devDependencies": {
+    "@babel/plugin-syntax-import-assertions": "^7.17.12",
     "@babel/preset-env": "^7.16.11",
     "babel-loader": "^8.2.4",
     "babel-plugin-rewire": "^1.2.0",

@@ -86,19 +86,22 @@ describe('Web Audio Player UI Tests', () => {
 
     it('Playlist clicked on', () => {
         const playlistButton = playaNode.querySelector('.playlist-scroll-box li:first-child > button');
-
-        return playlistButton.click().then(data => {
-            expect(data).toBe(true);
-        });
-
-        setTimeout(() => {
-            expect(prom).toBe(undefined);
         const screenTitle = playaNode.querySelector('.screen-title');
-        console.debug('Clicked', playaNode.innerHTML);
-        }, 500);
-        
+        const scrollBox = playaNode.querySelector('.playlist-scroll-box');
+        const observer = new audioPage.window.MutationObserver((mutationsList, observer) => {
+            for(const mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    expect(screenTitle).toBeInstanceOf(audioPage.window.HTMLParagraphElement);
+                    expect(screenTitle.innerHTML).toBe('Ttttt');
+                    expect(scrollBox.childElementCount).toBe(1);
+                }
+            }
 
-        // expect(screenTitle).toBeInstanceOf(audioPage.window.HTMLParagraphElement);
-        // expect(screenTitle.innerHTML).toBe('Ttttt');
+            observer.disconnect();
+        });
+        const config = { attributes: true, childList: true, subtree: true };
+    	observer.observe(screenTitle, config);
+
+        playlistButton.click();
     });
 });

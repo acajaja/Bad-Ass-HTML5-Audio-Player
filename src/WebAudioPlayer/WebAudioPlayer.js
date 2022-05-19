@@ -583,19 +583,17 @@ function _getPrevTrack() {
  * @param {DOM Event} e
  * @returns {Promise}
  */
-function _playlistButtonHandler(e) {
+async function _playlistButtonHandler(e) {
 	const plu = e.target.dataset.playlist;
 	e.preventDefault();
 
 	try {
 		const playlistUrl = new URL(plu);
-		const pl = _loadPlaylist(playlistUrl.href);
+		const pl = await _loadPlaylist(playlistUrl.href);
 		_handlePlaylist(pl);
-		console.debug('Done');
-		return Promise.resolve(true);
 	}
 	catch (ex) {
-		return Promise.reject('Failed to load playlist');
+		console.error('Failed to load playlist');
 	}
 }
 
