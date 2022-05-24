@@ -8,6 +8,7 @@ export const get = async (endpoint, queryParams = null) => {
 
     const requestParams = {
         headers: new Headers({
+            'Content-Type': 'application/json',
             'X-Requested-With': ''
         }),
         method: 'GET',

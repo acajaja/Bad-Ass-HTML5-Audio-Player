@@ -89,7 +89,7 @@ export const version		= '0.6';
 export const startup = (id) => {
 	let audio;
 	const la = (e) => {
-		const playerNode = _DOC.getElementById(id);
+		const playerNode = window.document.getElementById(id);
 		audio = init(playerNode, window.document);
 	}
 	window.document.addEventListener('DOMContentLoaded', la);
@@ -183,11 +183,11 @@ function _setUpFunctionality() {
 		handleButton: function(e) {
 			if (!_AUTO_PLAY) {
 				_AUTO_PLAY = true;
-				context.classList.add('autoplay');
+				_PLAYERROOT.classList.add('autoplay');
 			}
 			else {
 				_AUTO_PLAY = false;
-				context.classList.remove('autoplay');
+				_PLAYERROOT.classList.remove('autoplay');
 			}
 		}
 	}
@@ -256,14 +256,14 @@ function _setUpFunctionality() {
 	}
 	_PLAYER_FUNCS.playBtn = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.playBtn),
-		handleButton: function(e) {
+		handleButton: async function(e) {
 			// For the very first play after page load
 			if (_WEB_AUDIO.paused && _CURRENT_TRACK == null) {
 				_CURRENT_TRACK = 0;
 				_loadTrack(_CURRENT_TRACK);
 			}
 			else if (_WEB_AUDIO.paused) {
-				_play(e);                    
+				await _play(e);                    
 			}
 			else {
 				_pause(e);
@@ -332,14 +332,14 @@ function _setUpFunctionality() {
 			if (_WEB_AUDIO.muted) {
 				_WEB_AUDIO.muted = false;
 				_PLAYER_FUNCS.volumeSlider.setPosition(_SAVEDVOLUME);
-				context.classList.remove('muted');
+				_PLAYERROOT.classList.remove('muted');
 			}
 			else
 			{
 				_SAVEDVOLUME = _WEB_AUDIO.volume;
 				_WEB_AUDIO.muted = true;
 				_PLAYER_FUNCS.volumeSlider.setPosition(0);
-				context.classList.add('muted');
+				_PLAYERROOT.classList.add('muted');
 			}
 		}
 	}
@@ -773,11 +773,16 @@ function _pause(e) {
  * @param {DOM} e Event object
  * @returns {Void}
  */
-function _play(e) {
-	e.preventDefault();
+async function _play(e) {
 	_PLAYER_FUNCS.seekHandleBox.toggleEnable(false);
 	_PLAYER_FUNCS.seekHandleBox.setMax();
-	_WEB_AUDIO.play();
+
+	try {
+		await _WEB_AUDIO.play();
+	}
+	catch (ex) {
+		_PLAYER_FUNCS.seekHandleBox.toggleEnable(true);
+	}
 }
 
 /**
@@ -801,7 +806,7 @@ function _populateTimeDisplay(current, remain) {
  */
 function _removePlayingClassFromAll() {
 	_PLAYERROOT.classList.remove('playing');
-	const current = _PLAYER_FUNCS.playlistBox.getElementsByClassName('current')[0];
+	const current = _PLAYER_FUNCS.playlistBox.querySelector('current');
 
 	if (current) {
 		current.removeAttribute('class');

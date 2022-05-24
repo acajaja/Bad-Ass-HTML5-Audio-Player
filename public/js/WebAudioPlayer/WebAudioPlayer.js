@@ -9,6 +9,7 @@ import { playlists } from './components/playlists.js';
  * @package HTML5 JavaScript Audio Player
  * @version 0.6
  */
+let _DOC;
 let _AUDIO_CODECS_MIMES     = {
 	mp3: ['audio/mpeg', 'audio/MPA', 'audio/mpa-robust','audio/mpeg3','audio/x-mpeg-3'],
 	mp4: ['audio/aac', 'audio/aacp', 'audio/3gpp', 'audio/3gpp2', 'audio/mp4', 'audio/MP4A-LATM', 'audio/mpeg4-generic'],
@@ -79,7 +80,8 @@ export const version		= '0.6';
  ---------------------------------------------------------------------*/
 
  /**
-  * Startup an instance of a player by passing in an id.
+  * Startup an instance of a player by passing in an id. This
+  * is meant to be used in production environments.
   *
   * @param {String} id DOM node id attribute for your player.
   * @returns {HTMLWebAudioElement}
@@ -87,8 +89,8 @@ export const version		= '0.6';
 export const startup = (id) => {
 	let audio;
 	const la = (e) => {
-		const playerNode = document.getElementById(id);
-		audio = init(playerNode);
+		const playerNode = window.document.getElementById(id);
+		audio = init(playerNode, window.document);
 	}
 	window.document.addEventListener('DOMContentLoaded', la);
 
@@ -100,9 +102,10 @@ export const startup = (id) => {
  *
  * @return {HTMLWebAudioElement}
  */
- export const init = (playerNode, audio = null) => {
-	_PLAYERROOT		= playerNode;
-	_HTML5_SUPPORT	= _checkWebAudioApiSupport();
+ export const init = (playerNode, doc, audio = null) => {
+	_PLAYERROOT	   = playerNode;
+	_DOC		   = doc;
+	_HTML5_SUPPORT = _checkWebAudioApiSupport();
 
 	try {
 		if (!_HTML5_SUPPORT) {
@@ -137,12 +140,12 @@ export const startup = (id) => {
 
 		_connectPlayerButtons();
 		_connectAudioEvents();
-		_handleAllPlaylists();
+		_renderPlaylistsList();
 
 		return _WEB_AUDIO;
 	}
 	catch (err) {
-		console.error(err);
+		// console.error(err);
 	}
 }
 
@@ -157,7 +160,7 @@ export const startup = (id) => {
  * @returns {object} DOMNode|null
  */
 function _getNodeByClass(className) {
-    return document.querySelector(`#${_PLAYERROOT.id} ${className}`);
+    return _DOC.querySelector(`#${_PLAYERROOT.id} ${className}`);
 }
 
 /**
@@ -180,11 +183,11 @@ function _setUpFunctionality() {
 		handleButton: function(e) {
 			if (!_AUTO_PLAY) {
 				_AUTO_PLAY = true;
-				context.classList.add('autoplay');
+				_PLAYERROOT.classList.add('autoplay');
 			}
 			else {
 				_AUTO_PLAY = false;
-				context.classList.remove('autoplay');
+				_PLAYERROOT.classList.remove('autoplay');
 			}
 		}
 	}
@@ -253,14 +256,14 @@ function _setUpFunctionality() {
 	}
 	_PLAYER_FUNCS.playBtn = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.playBtn),
-		handleButton: function(e) {
+		handleButton: async function(e) {
 			// For the very first play after page load
 			if (_WEB_AUDIO.paused && _CURRENT_TRACK == null) {
 				_CURRENT_TRACK = 0;
 				_loadTrack(_CURRENT_TRACK);
 			}
 			else if (_WEB_AUDIO.paused) {
-				_play(e);                    
+				await _play(e);                    
 			}
 			else {
 				_pause(e);
@@ -329,14 +332,14 @@ function _setUpFunctionality() {
 			if (_WEB_AUDIO.muted) {
 				_WEB_AUDIO.muted = false;
 				_PLAYER_FUNCS.volumeSlider.setPosition(_SAVEDVOLUME);
-				context.classList.remove('muted');
+				_PLAYERROOT.classList.remove('muted');
 			}
 			else
 			{
 				_SAVEDVOLUME = _WEB_AUDIO.volume;
 				_WEB_AUDIO.muted = true;
 				_PLAYER_FUNCS.volumeSlider.setPosition(0);
-				context.classList.add('muted');
+				_PLAYERROOT.classList.add('muted');
 			}
 		}
 	}
@@ -386,7 +389,7 @@ function _loadAllPlaylistsHandler(e) {
 	setTimeout(function() {
 		_PLAYER_FUNCS.volumeSliderMute.close();
 		_PLAYER_FUNCS.userScreen.reset();
-		_handleAllPlaylists();
+		_renderPlaylistsList();
 	}, 100);
 }
 
@@ -399,7 +402,6 @@ function _loadAllPlaylistsHandler(e) {
  * @returns {Void}
  */
 function _attachEvents(node, event, handler) {
-	console.debug(node, event, handler);
 	if (typeof node.addEventListener != 'function') {
 		throw new Error('Cannot attach events. Client does not support addEventListener method.');
 	}
@@ -513,7 +515,7 @@ function _convertSecondsToTime(s, rev) {
  * @returns {Text}
  */
 function _createTextNode(str) {
-	return document.createTextNode(str);
+	return _DOC.createTextNode(str);
 }
 
 /**
@@ -561,7 +563,7 @@ function _getPrevTrack() {
  * Load the playlist with an optional playlist path
  *
  * @param {String} pl Path to load playlist from via AJAX
- * @return {Boolean}
+ * @return {JSON}
  */
  async function _loadPlaylist(pl) {
 	if (typeof pl != 'string' || pl.length <= 0) {
@@ -578,7 +580,8 @@ function _getPrevTrack() {
 /**
  * Handle clicks on a single playlist.
  *
- * @param {DOM Event} e 
+ * @param {DOM Event} e
+ * @returns {Promise}
  */
 async function _playlistButtonHandler(e) {
 	const plu = e.target.dataset.playlist;
@@ -589,8 +592,8 @@ async function _playlistButtonHandler(e) {
 		const pl = await _loadPlaylist(playlistUrl.href);
 		_handlePlaylist(pl);
 	}
-	catch (exception) {
-		console.error(exception);
+	catch (ex) {
+		console.error('Failed to load playlist');
 	}
 }
 
@@ -601,7 +604,7 @@ async function _playlistButtonHandler(e) {
  * @returns {Void}
  */
  function _handlePlaylist(pl) {
-	pl = JSON.parse(JSON.stringify(pl));
+	// pl = JSON.parse(JSON.stringify(pl));
 
 	_togglePlayerButtons(false);
 
@@ -616,15 +619,14 @@ async function _playlistButtonHandler(e) {
 }
 
 /**
- * Handler for loading all playlists defined and
- * imported in 'playlists' named import. This renders
- * a list of playlist buttons in _PLAYER_FUNCS.playlistBox.
+ * Render the playlists defined and imported in
+ * 'playlists' named import into _PLAYER_FUNCS.playlistBox.
  *
  * @returns {Void}
  */
-function _handleAllPlaylists() {
+function _renderPlaylistsList() {
 	if (typeof playlists == 'undefined' || playlists == null || playlists.length <= 0) {
-		throw new Error('No playlists found! See public/js/WebAudioPlayer/components/playlists.js');
+		throw new Error('No playlists found! See ./components/playlists.js');
 	}
 
     _PLAYER_FUNCS.playlistBtn.node.classList.add('active');
@@ -632,9 +634,8 @@ function _handleAllPlaylists() {
 	_empty(_PLAYER_FUNCS.playlistBox);
 
 	for (const playlist of playlists) {
-		console.debug(playlist);
-		const button = document.createElement('button');
-		const li = document.createElement('li');
+		const button = _DOC.createElement('button');
+		const li = _DOC.createElement('li');
 
 		button.appendChild(_createTextNode(playlist.name));
 		button.dataset.playlist = playlist.url;
@@ -772,11 +773,16 @@ function _pause(e) {
  * @param {DOM} e Event object
  * @returns {Void}
  */
-function _play(e) {
-	e.preventDefault();
+async function _play(e) {
 	_PLAYER_FUNCS.seekHandleBox.toggleEnable(false);
 	_PLAYER_FUNCS.seekHandleBox.setMax();
-	_WEB_AUDIO.play();
+
+	try {
+		await _WEB_AUDIO.play();
+	}
+	catch (ex) {
+		_PLAYER_FUNCS.seekHandleBox.toggleEnable(true);
+	}
 }
 
 /**
@@ -800,7 +806,7 @@ function _populateTimeDisplay(current, remain) {
  */
 function _removePlayingClassFromAll() {
 	_PLAYERROOT.classList.remove('playing');
-	const current = _PLAYER_FUNCS.playlistBox.getElementsByClassName('current')[0];
+	const current = _PLAYER_FUNCS.playlistBox.querySelector('current');
 
 	if (current) {
 		current.removeAttribute('class');
@@ -839,11 +845,11 @@ function _setUpPlaylistDisplay() {
 
 	for (let x = 0; x < _PLAYLIST.tracks.length; x++) {
 		const track = _PLAYLIST.tracks[x];
-		const li = document.createElement('li');
+		const li = _DOC.createElement('li');
 		const shortText = _makeShortTitle(track.title);
 
 		// Create a new button node & dress it up.
-		const btn = document.createElement('button');
+		const btn = _DOC.createElement('button');
 		btn.appendChild(_createTextNode(shortText));
 		btn.setAttribute('data-tracknum', x);
 		// Add to list item
