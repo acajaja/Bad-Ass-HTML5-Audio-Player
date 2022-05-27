@@ -1,5 +1,6 @@
 import * as HttpClient from './components/HttpClient.js';
 import { playlists } from './components/playlists.js';
+import * as logger from './components/logger.js';
 /**
  * HTML5 JavaScript Audio Player v0.6.
  *
@@ -86,6 +87,7 @@ export const version		= '0.6';
   * @param {String} id DOM node id attribute for your player.
   * @returns {HTMLWebAudioElement}
   */
+/* istanbul ignore next */
 export const startup = (id) => {
 	let audio;
 	const la = (e) => {
@@ -145,7 +147,7 @@ export const startup = (id) => {
 		return _WEB_AUDIO;
 	}
 	catch (err) {
-		// console.error(err);
+		logger.error('Failed to initiate the Web Audio Player :(');
 	}
 }
 
@@ -166,6 +168,7 @@ function _getNodeByClass(className) {
 /**
  * Define all the functionality the player UI needs.
  */
+/* istanbul ignore next */
 function _setUpFunctionality() {
 	_PLAYER_FUNCS.ajaxSpinner = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.ajaxSpinner),
@@ -317,15 +320,8 @@ function _setUpFunctionality() {
 	}
 	_PLAYER_FUNCS.volumeButton = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.volumeButton),
-		toggleActive: function(toggle) {
-			toggle = typeof toggle == 'undefined' ? null : toggle;
-
-			if (_PLAYER_FUNCS.volumeButton.node.classList.contains('active') || toggle === false) {
-				_PLAYER_FUNCS.volumeButton.node.classList.remove('active');
-			}
-			else {
-				_PLAYER_FUNCS.volumeButton.node.classList.add('active');
-			}
+		toggleActive: function() {
+			_PLAYER_FUNCS.volumeButton.node.classList.toggle('active');
 		},
 		toggleMute: function(e) {
 			// Unmute
@@ -334,8 +330,8 @@ function _setUpFunctionality() {
 				_PLAYER_FUNCS.volumeSlider.setPosition(_SAVEDVOLUME);
 				_PLAYERROOT.classList.remove('muted');
 			}
-			else
-			{
+			// Mute
+			else {
 				_SAVEDVOLUME = _WEB_AUDIO.volume;
 				_WEB_AUDIO.muted = true;
 				_PLAYER_FUNCS.volumeSlider.setPosition(0);
@@ -345,11 +341,11 @@ function _setUpFunctionality() {
 	}
 	_PLAYER_FUNCS.volumeSliderMute = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.volumeSliderMute),
-		close: function() {
-			_PLAYER_FUNCS.volumeButton.toggleActive(false);
+		close: () => {
+			_PLAYER_FUNCS.volumeButton.toggleActive();
 			_PLAYER_FUNCS.volumeSliderMute.node.classList.remove('play');
 		},
-		open: function() {
+		open: () => {
 			_PLAYER_FUNCS.volumeButton.toggleActive();
 			_PLAYER_FUNCS.volumeSliderMute.node.classList.add('play');
 		},
@@ -362,13 +358,15 @@ function _setUpFunctionality() {
 			}
 		}
 	}
+	/* istanbul ignore next */
 	_PLAYER_FUNCS.volumeSlider = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.volumeSlider),
 		handleInput: function(e) {
 			_WEB_AUDIO.volume = e.target.value;
 		},
 		setPosition: function(v) {
-			_PLAYER_FUNCS.volumeSlider.node.value = v > 1 ? 1 : v;
+			const vol = parseInt(v);
+			_PLAYER_FUNCS.volumeSlider.node.value = vol > 1 ? 1 : vol;
 		}
 	}
 }
@@ -378,6 +376,7 @@ function _setUpFunctionality() {
  *
  * @param {DOM Event} e 
  */
+/* istanbul ignore next */
 function _loadAllPlaylistsHandler(e) {
 	_togglePlayerButtons(true);
 
@@ -414,6 +413,7 @@ function _attachEvents(node, event, handler) {
  * @param {String} type 
  * @returns 
  */
+/* istanbul ignore next */
 function _canPlayType(type) {
 	return _WEB_AUDIO.canPlayType(type);
 }
@@ -453,6 +453,7 @@ function _checkWebAudioApiSupport() {
  * @param {Array} types List of mime types
  * @returns {Boolean|String} If not false, returns the audio mime.
  */
+/* istanbul ignore next */
 function _checkMimeSupport() {
 	var ans = '';
 

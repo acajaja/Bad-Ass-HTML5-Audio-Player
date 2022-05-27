@@ -82,7 +82,7 @@ describe('Web Audio Player UI Tests', () => {
         expect(playaNode.classList.contains('paused')).toBe(true);
     });
 
-    it('Playlist clicked on', () => {
+    it('Playlist clicked on - should load mock playlist', () => {
         const playlistButton = playaNode.querySelector('.playlist-scroll-box li:first-child > button');
         const screenTitle = playaNode.querySelector('.screen-title');
         const scrollBox = playaNode.querySelector('.playlist-scroll-box');
@@ -92,10 +92,10 @@ describe('Web Audio Player UI Tests', () => {
                     expect(mutation.target).toBeInstanceOf(audioPage.window.HTMLParagraphElement);
                     expect(mutation.target.innerHTML).toBe('Ttttt');
                     expect(scrollBox.childElementCount).toBe(1);
+                    observer.disconnect();
                 }
             }
 
-            observer.disconnect();
         });
         const config = { childList: true };
     	mobserver.observe(screenTitle, config);
@@ -103,7 +103,7 @@ describe('Web Audio Player UI Tests', () => {
         playlistButton.click();
     });
 
-    it('Playlist loaded, Track clicked on', () => {
+    it('Playlist loaded, Track clicked on - should play track', () => {
         const playlistButton = playaNode.querySelector('.playlist-scroll-box li:first-child > button');
         const scrollBox = playaNode.querySelector('.playlist-scroll-box');
 
@@ -139,7 +139,7 @@ describe('Web Audio Player UI Tests', () => {
         playlistButton.click();
     });
 
-    it('Playlist loaded, play button clicked on', () => {
+    it('Playlist loaded, play button clicked on - should play track', () => {
         const playButton = playaNode.querySelector('.play-btn');
         const playlistButton = playaNode.querySelector('.playlist-scroll-box li:first-child > button');
         const scrollBox = playaNode.querySelector('.playlist-scroll-box');
@@ -193,8 +193,6 @@ describe('Web Audio Player UI Tests', () => {
                     }
                 }
             };
-
-            mobserver.disconnect();
         });
 
         const config = {childList: true};
@@ -202,7 +200,7 @@ describe('Web Audio Player UI Tests', () => {
         playlistButton.click();
     });
 
-    it('Playlists loaded, volume button clicked on', () => {
+    it('Playlists loaded, volume button clicked on, vol slider not active', () => {
         const volumeButton = playaNode.querySelector('.volume-button');
         const volumeSliderBox = playaNode.querySelector('.volume-slider-mute-box');
 
@@ -214,8 +212,6 @@ describe('Web Audio Player UI Tests', () => {
                     expect(m.target.querySelector('button').disabled).toBe(true);
                 }
             };
-
-            mobserver.disconnect();
         });
 
         const config = {attributes: true};
@@ -223,35 +219,107 @@ describe('Web Audio Player UI Tests', () => {
         volumeButton.click();
     });
 
-    it('Playlist loaded, volume button clicked on', () => {
+    it('Playlist loaded, toggle volume', () => {
         const volumeButton = playaNode.querySelector('.volume-button');
         const volumeSliderBox = playaNode.querySelector('.volume-slider-mute-box');
         const playlistButton = playaNode.querySelector('.playlist-scroll-box li:first-child > button');
         const scrollBox = playaNode.querySelector('.playlist-scroll-box');
 
+        expect(scrollBox.childElementCount).toBe(7);
+
         const mobserver = new audioPage.window.MutationObserver(async (mutationsList, observer) => {
-            expect(scrollBox.childElementCount).toBe(1);
+            switch (mutationsList.length) {
+                case 2:
+                    expect(mutationsList[0].type.toLowerCase()).toBe('attributes');
+                    expect(mutationsList[1].type.toLowerCase()).toBe('attributes');
 
-            for (const m of mutationsList) {
-                if (m.type === 'childList') {
-                    const config = {attributes: true};
-                	mobserver.observe(volumeSliderBox, config);
-                    volumeButton.click();
+                    const volButt = mutationsList[0].target;
+                    const volSliderBox = mutationsList[1].target;
 
-                    console.debug(m.type);
-                    if (m.type === 'attributes') {
-                        expect(volumeSliderBox.classList.contains('play')).toBe(true);
-                        expect(m.target.querySelector('input').disabled).toBe(false);
-                        expect(m.target.querySelector('button').disabled).toBe(false);
+                    expect(volButt.classList.contains('volume-button')).toBe(true);
+                    expect(volSliderBox.classList.contains('volume-slider-mute-box')).toBe(true);
+                    
+                    const input = volSliderBox.querySelector('input');
+                    const muteButt = volSliderBox.querySelector('button');
+
+                    if (volButt.classList.contains('active')) {
+                        expect(input.disabled).toBe(false);
+                        expect(muteButt.disabled).toBe(false);
+                        expect(volSliderBox.classList.contains('play')).toBe(true);
+
+                        // Click volume butt again to hide
+                        volumeButton.click();
                     }
-                }
-            };
+                    else {
+                        expect(volSliderBox.classList.contains('play')).toBe(false);
+                    }
 
-            mobserver.disconnect();
+                    break;
+                case 8:
+                    expect(mutationsList[0].type.toLowerCase()).toBe('childlist');
+                    // Click volume butt to show
+                    volumeButton.click();
+                    break;
+                default:
+                    console.error(777);
+                    break;
+            }
         });
 
-        const config = {childList: true};
-    	mobserver.observe(scrollBox, config);
+        mobserver.observe(scrollBox, {childList: true});
+        mobserver.observe(volumeButton, {attributes: true, attributeFilter: ['class']});
+        mobserver.observe(volumeSliderBox, {attributes: true, attributeFilter: ['class']});
+        playlistButton.click();
+    });
+
+    it('Playlist loaded, toggle mute button', () => {
+        const volumeButton = playaNode.querySelector('.volume-button');
+        const volumeSlider = playaNode.querySelector('.volume-slider');
+        const volumeSliderBox = playaNode.querySelector('.volume-slider-mute-box');
+        const muteButton = playaNode.querySelector('.mute-button');
+        const playlistButton = playaNode.querySelector('.playlist-scroll-box li:first-child > button');
+        const scrollBox = playaNode.querySelector('.playlist-scroll-box');
+
+        expect(scrollBox.childElementCount).toBe(7);
+
+        const mobserver = new audioPage.window.MutationObserver((mutationsList, observer) => {
+            switch (mutationsList.length) {
+                case 1:
+                    expect(mutationsList[0].type.toLowerCase()).toBe('attributes');
+                    const target = mutationsList[0].target;
+
+                    if (target.classList.contains('volume-slider-mute-box')) {
+                        expect(target.classList.contains('play')).toBe(true);
+                        expect(muteButton.disabled).toBe(false);
+
+                        // Click mute button to mute
+                        muteButton.click();
+                    }
+                    else if (target.classList.contains('web-audio-player')) {
+                        if (target.classList.contains('muted')) {
+                            expect(parseInt(volumeSlider.value)).toBe(0);
+                            // Click mute button again to un-mute
+                            muteButton.click();
+                        }
+                        else {
+                            // Here, we know that the 'muted' class has been removed
+                            expect(target.classList.contains('muted')).toBe(false);
+                            expect(parseInt(volumeSlider.value)).toBe(0);
+                        }
+                    }
+
+                    break;
+                case 8:
+                    expect(mutationsList[0].type.toLowerCase()).toBe('childlist');
+                    // Click volume butt to show
+                    volumeButton.click();
+                    break;
+            }
+        });
+
+        mobserver.observe(scrollBox, {childList: true});
+        mobserver.observe(playaNode, {attributes: true, attributeFilter: ['class']});
+        mobserver.observe(volumeSliderBox, {attributes: true, attributeFilter: ['class']});
         playlistButton.click();
     });
 });

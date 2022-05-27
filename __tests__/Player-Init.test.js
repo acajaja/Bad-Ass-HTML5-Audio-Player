@@ -1,5 +1,17 @@
 import * as WebAudioPlayer from '../src/WebAudioPlayer/WebAudioPlayer';
 import { _checkHtml5AudioSupport, __RewireAPI__ as WebAudioPlayerRewireAPI } from '../src/WebAudioPlayer/WebAudioPlayer';
+import * as logger from '../src/WebAudioPlayer/components/logger';
+jest.mock('../src/WebAudioPlayer/components/logger.js', () => {
+    return {
+        __esModule: true,
+        critical: jest.fn(msg => {}),
+        debug: jest.fn(msg => {}),
+        error: jest.fn(msg => {}),
+        info: jest.fn(msg => {}),
+        log: jest.fn(msg => {}),
+        warn: jest.fn(msg => {})
+    }
+});
 
 describe('Web Audio Player Init Tests', () => {
     const path      = require('path');
@@ -70,8 +82,41 @@ describe('Web Audio Player Init Tests', () => {
         WebAudioPlayerRewireAPI.__Rewire__('_checkWebAudioApiSupport', () => {
             return false;
         });
-        const result = await WebAudioPlayer.init(playaNode, audioPage.window.HTMLAudioElement);
+        const result = await WebAudioPlayer.init(playaNode, audioPage.window.document, audioPage.window.HTMLAudioElement);
 
+        expect(playaNode.classList.contains('paused')).toBe(false);
+        expect(logger.error).toHaveBeenCalled();
+        expect(result).toBe(undefined);
+    });
+
+    it('Init player - No codec support', async () => {
+        WebAudioPlayerRewireAPI.__Rewire__('_checkWebAudioApiSupport', () => {
+            return true;
+        });
+        WebAudioPlayerRewireAPI.__Rewire__('_checkMimeSupport', () => {
+            return false;
+        });
+        const result = await WebAudioPlayer.init(playaNode, audioPage.window.document, audioPage.window.HTMLAudioElement);
+
+        expect(playaNode.classList.contains('paused')).toBe(true);
+        expect(logger.error).toHaveBeenCalled();
+        expect(result).toBe(undefined);
+    });
+
+
+    it('Evenet listener not supported', async () => {
+        audioPage.window.HTMLAudioElement.addEventListener = undefined;
+        WebAudioPlayerRewireAPI.__Rewire__('_checkWebAudioApiSupport', () => {
+            return true;
+        });
+        WebAudioPlayerRewireAPI.__Rewire__('_checkMimeSupport', () => {
+            return true;
+        });
+
+        const result = await WebAudioPlayer.init(playaNode, audioPage.window.document, audioPage.window.HTMLAudioElement);
+
+        expect(playaNode.classList.contains('paused')).toBe(true);
+        expect(logger.error).toHaveBeenCalled();
         expect(result).toBe(undefined);
     });
 });
