@@ -1,26 +1,6 @@
+jest.mock('../src/WebAudioPlayer/components/HttpClient.js');
 import * as HttpClient from '../src/WebAudioPlayer/components/HttpClient';
-jest.mock('../src/WebAudioPlayer/components/HttpClient.js', () => {
-    const mockGet = jest.fn().mockImplementation(() => Promise.resolve(JSON.parse(`{
-            "name": "Ttttt",
-            "info": "",
-            "tracks":
-            [
-                {
-                    "copyright":"2007 East 3rd Street Ensemble",
-                    "path":"./audio/short-1.mp3",
-                    "info":"",
-                    "mime":"audio/mpeg",
-                    "title":"Track 1"
-                }
-            ]
-        }`)));
-
-    return {
-        __esModule: true,
-        get: mockGet
-    }
-});
-
+import { getMockJsonPLaylist } from './Stubs/MockJson';
 import * as WebAudioPlayer from '../src/WebAudioPlayer/WebAudioPlayer';
 import { _checkHtml5AudioSupport, __RewireAPI__ as WebAudioPlayerRewireAPI } from '../src/WebAudioPlayer/WebAudioPlayer';
 
@@ -32,6 +12,9 @@ describe('Web Audio Player UI Tests', () => {
     let result;
 
     beforeEach(async () => {
+        const mockJson = getMockJsonPLaylist('Ttttt');
+        HttpClient.get.mockImplementationOnce(async () => await Promise.resolve(mockJson));
+
         audioPage = await JSDOM.fromFile(path.resolve(__dirname, 'Stubs/audio-player.html'));
         audioPage.window.HTMLAudioElement.addEventListener = jest.fn((event, callback) => {
             audioPage.window.HTMLAudioElement[event] = jest.fn(callback);
@@ -54,11 +37,12 @@ describe('Web Audio Player UI Tests', () => {
     afterEach(() => {
         // restore the original func after test_setUpFunctionality
         jest.resetModules();
+        jest.resetAllMocks();
     });
 
     it('Playlists list loaded', () => {
         const playlist = playaNode.querySelector('.playlist-scroll-box');
-        const playlistItems = playlist.querySelectorAll('li');
+        // const playlistItems = playlist.querySelectorAll('li');
         const playButton = playaNode.querySelector('.play-btn');
         const autoplayButton = playaNode.querySelector('.autoplay-btn');
         const nextButton = playaNode.querySelector('.next-track-btn');
@@ -67,7 +51,7 @@ describe('Web Audio Player UI Tests', () => {
 
         expect(result).toBe(audioPage.window.HTMLAudioElement);
         expect(playlist).toBeInstanceOf(audioPage.window.HTMLOListElement);
-        expect(playlistItems.length).toBe(7);
+        expect(playlist.childElementCount).toBe(7);
         expect(playlist).toMatchSnapshot(playlist);
         expect(playButton).toBeInstanceOf(audioPage.window.HTMLButtonElement);
         expect(playButton.disabled).toBe(true);
@@ -83,22 +67,31 @@ describe('Web Audio Player UI Tests', () => {
     });
 
     it('Playlist clicked on - should load mock playlist', () => {
+        const spinner = playaNode.querySelector('.net-stat-box');
         const playlistButton = playaNode.querySelector('.playlist-scroll-box li:first-child > button');
         const screenTitle = playaNode.querySelector('.screen-title');
         const scrollBox = playaNode.querySelector('.playlist-scroll-box');
+
+        expect(scrollBox.childElementCount).toBe(7);
+
         const mobserver = new audioPage.window.MutationObserver((mutationsList, observer) => {
-            for (const mutation of mutationsList) {
-                if (mutation.type === 'childList') {
+            expect(mutationsList.length).toBe(1);
+            const mutation = mutationsList[0];
+
+            switch (mutation.type.toLowerCase()) {
+                case 'childlist':
                     expect(mutation.target).toBeInstanceOf(audioPage.window.HTMLParagraphElement);
                     expect(mutation.target.innerHTML).toBe('Ttttt');
                     expect(scrollBox.childElementCount).toBe(1);
-                    observer.disconnect();
-                }
+                    break;
+                case 'attributes':
+                    expect(mutation.target.classList.contains('play')).toBe(true);
+                    break;
             }
-
         });
-        const config = { childList: true };
-    	mobserver.observe(screenTitle, config);
+
+    	mobserver.observe(spinner, { attributes: true });
+    	mobserver.observe(screenTitle, { childList: true });
 
         playlistButton.click();
     });
@@ -108,29 +101,36 @@ describe('Web Audio Player UI Tests', () => {
         const scrollBox = playaNode.querySelector('.playlist-scroll-box');
 
         const mobserver = new audioPage.window.MutationObserver(async (mutationsList, observer) => {
-            expect(scrollBox.childElementCount).toBe(1);
-            expect(mutationsList[0].type).toBe('childList');
+            let mutation = mutationsList[0];
 
-            const li = scrollBox.querySelector('li:first-child');
-            const configB = {attributes: true};
+            switch (mutationsList.length) {
+                case 1:
+                    expect(mutation.type).toBe('attributes');
+                    expect(mutation.target).toBeInstanceOf(audioPage.window.HTMLLIElement);
+                    expect(mutation.target.classList.length).toBe(1);
+                    expect(mutation.target.classList.contains('current')).toBe(true);
+                    break;
+                case 8:
+                    const node = mutation.target;
+                    expect(node.childElementCount).toBe(1);
+                    expect(mutation.type).toBe('childList');
 
-            observer.observe(li, configB);
+                    const li = scrollBox.querySelector('li:first-child');
+                    expect(li.classList.contains('current')).toBe(false);
 
-            const trackButton = li.querySelector('button');
-            trackButton.click();
+                    observer.observe(li, {attributes: true});
 
-            try {
-                await audioPage.window.HTMLAudioElement.canplay();
-                audioPage.window.HTMLAudioElement.playing();
+                    const trackButton = li.querySelector('button');
+                    trackButton.click();
 
-                expect(li.classList.length).toBe(1);
-                expect(li.classList.contains('current')).toBe(true);
-
-                observer.disconnect();
-            }
-            catch (err) {
-                observer.disconnect();
-                throw err;
+                    try {
+                        await audioPage.window.HTMLAudioElement.canplay();
+                        audioPage.window.HTMLAudioElement.playing();
+                    }
+                    catch (err) {
+                        throw err;
+                    }
+                    break;
             }
         });
 
@@ -320,6 +320,102 @@ describe('Web Audio Player UI Tests', () => {
         mobserver.observe(scrollBox, {childList: true});
         mobserver.observe(playaNode, {attributes: true, attributeFilter: ['class']});
         mobserver.observe(volumeSliderBox, {attributes: true, attributeFilter: ['class']});
+        playlistButton.click();
+    });
+
+    it ('Play throws', () => {
+        audioPage.window.HTMLAudioElement['play'] = jest.fn(async () => { await Promise.reject(); });
+        const playlistButton = playaNode.querySelector('.playlist-scroll-box li:first-child > button');
+        const scrollBox = playaNode.querySelector('.playlist-scroll-box');
+        const seekHandleBox = playaNode.querySelector('.seek-handle-box');
+
+        const mobserver = new audioPage.window.MutationObserver(async (mutationsList, observer) => {
+            let mutation = mutationsList[0];
+
+            switch (mutationsList.length) {
+                case 1:
+                    expect(mutation.type).toBe('attributes');
+                    expect(mutation.target).toBeInstanceOf(audioPage.window.HTMLLIElement);
+                    expect(mutation.target.classList.length).toBe(1);
+                    expect(mutation.target.classList.contains('current')).toBe(true);
+                    expect(seekHandleBox.disabled).toBe(true);
+                    break;
+                case 8:
+                    const node = mutation.target;
+                    expect(node.childElementCount).toBe(1);
+                    expect(mutation.type).toBe('childList');
+                    expect(seekHandleBox.disabled).toBe(false);
+
+                    const li = scrollBox.querySelector('li:first-child');
+                    expect(li.classList.contains('current')).toBe(false);
+
+                    observer.observe(li, {attributes: true});
+
+                    const trackButton = li.querySelector('button');
+                    trackButton.click();
+
+                    try {
+                        await audioPage.window.HTMLAudioElement.canplay();
+                        audioPage.window.HTMLAudioElement.playing();
+                    }
+                    catch (err) {
+                        throw err;
+                    }
+                    break;
+            }
+        });
+
+        const config = {childList: true};
+    	mobserver.observe(scrollBox, config);
+        playlistButton.click();
+    });
+
+    it ('No track info', () => {
+        const mockJson = getMockJsonPLaylist('No info', false);
+        HttpClient.get.mockImplementationOnce(async () => await Promise.resolve(mockJson));
+
+        const playlistButton = playaNode.querySelector('.playlist-scroll-box li:first-child > button');
+        const scrollBox = playaNode.querySelector('.playlist-scroll-box');
+        const seekHandleBox = playaNode.querySelector('.seek-handle-box');
+
+        const mobserver = new audioPage.window.MutationObserver(async (mutationsList, observer) => {
+            let mutation = mutationsList[0];
+
+            switch (mutationsList.length) {
+                case 1:
+                    expect(mutation.type).toBe('attributes');
+                    expect(mutation.target).toBeInstanceOf(audioPage.window.HTMLLIElement);
+                    expect(mutation.target.classList.length).toBe(1);
+                    expect(mutation.target.classList.contains('current')).toBe(true);
+                    expect(seekHandleBox.disabled).toBe(false);
+                    break;
+                case 8:
+                    const node = mutation.target;
+                    expect(node.childElementCount).toBe(1);
+                    expect(mutation.type).toBe('childList');
+                    expect(seekHandleBox.disabled).toBe(false);
+
+                    const li = scrollBox.querySelector('li:first-child');
+                    expect(li.classList.contains('current')).toBe(false);
+
+                    observer.observe(li, {attributes: true});
+
+                    const trackButton = li.querySelector('button');
+                    trackButton.click();
+
+                    try {
+                        await audioPage.window.HTMLAudioElement.canplay();
+                        audioPage.window.HTMLAudioElement.playing();
+                    }
+                    catch (err) {
+                        throw err;
+                    }
+                    break;
+            }
+        });
+
+        const config = {childList: true};
+    	mobserver.observe(scrollBox, config);
         playlistButton.click();
     });
 });

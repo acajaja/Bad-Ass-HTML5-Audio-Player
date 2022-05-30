@@ -10,6 +10,8 @@ import * as logger from './components/logger.js';
  * @package HTML5 JavaScript Audio Player
  * @version 0.6
  */
+export const version		= '0.6';
+ 
 let _DOC;
 let _AUDIO_CODECS_MIMES     = {
 	mp3: ['audio/mpeg', 'audio/MPA', 'audio/mpa-robust','audio/mpeg3','audio/x-mpeg-3'],
@@ -74,8 +76,6 @@ let _PLAYER_FUNCS			= {
     volumeSlider: {}
 }
 
-export const version		= '0.6';
-
 /**
  * Public Methods
  ---------------------------------------------------------------------*/
@@ -90,11 +90,11 @@ export const version		= '0.6';
 /* istanbul ignore next */
 export const startup = (id) => {
 	let audio;
-	const la = (e) => {
+	const cb = (e) => {
 		const playerNode = window.document.getElementById(id);
 		audio = init(playerNode, window.document);
 	}
-	window.document.addEventListener('DOMContentLoaded', la);
+	window.document.addEventListener('DOMContentLoaded', cb);
 
 	return audio;
 }
@@ -166,82 +166,116 @@ function _getNodeByClass(className) {
 }
 
 /**
+ * 
+ * @param {Boolean} state 
+ */
+function _ajaxSpinnerToggler(state) {
+	if (state) {
+		_PLAYER_FUNCS.ajaxSpinner.node.classList.add('play');
+	}
+	else {
+		_PLAYER_FUNCS.ajaxSpinner.node.classList.remove('play');
+	}
+}
+
+/**
+ * 
+ * @param {DOM Event} e 
+ */
+function _autoPlayButtonHandler(e) {
+	if (!_AUTO_PLAY) {
+		_AUTO_PLAY = true;
+		_PLAYERROOT.classList.add('autoplay');
+	}
+	else {
+		_AUTO_PLAY = false;
+		_PLAYERROOT.classList.remove('autoplay');
+	}
+}
+
+/**
+ * 
+ * @param {Boolean} state 
+ */
+function _infoButtonHandler(state) {
+	if (state) {
+		_PLAYER_FUNCS.infoButton.node.classList.remove('has-info');
+		_PLAYER_FUNCS.infoButton.node.disabled = true;
+	}
+	else {
+		_PLAYER_FUNCS.infoButton.node.classList.add('has-info');
+		_PLAYER_FUNCS.infoButton.node.disabled = false;
+	}
+}
+
+/**
+ * 
+ * @param {Boolean} fast 
+ */
+function _infoScreenCloseHandler(fast) {
+	if (fast) {
+		_PLAYER_FUNCS.infoScreen.node.classList.add('fast');
+		// setTimeout(function() {
+			_PLAYER_FUNCS.infoScreen.node.classList.remove('fast');
+		// }, 500);
+	}
+	_PLAYER_FUNCS.infoScreen.node.classList.remove('play');
+}
+
+/**
+ * 
+ */
+function _infoScreenOpenHandler() {
+	_PLAYER_FUNCS.infoScreen.node.classList.add('play');
+}
+
+/**
+ * 
+ * @param {DOM Event} e 
+ */
+function _infoScreenToggler(e) {
+	if (_PLAYER_FUNCS.infoScreen.node.classList.contains('play')) {
+		_PLAYER_FUNCS.infoScreen.close();
+		// classList.remove('active');
+	}
+	else {
+		_PLAYER_FUNCS.infoScreen.open();
+		// classList.add('active');
+	}
+}
+
+/**
  * Define all the functionality the player UI needs.
  */
-/* istanbul ignore next */
 function _setUpFunctionality() {
 	_PLAYER_FUNCS.ajaxSpinner = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.ajaxSpinner),
-		toggle: function(state) {
-			if (state) {
-				_PLAYER_FUNCS.ajaxSpinner.node.classList.add('play');
-			}
-			else {
-				_PLAYER_FUNCS.ajaxSpinner.node.classList.remove('play');
-			}
-		}
+		toggle: _ajaxSpinnerToggler
 	}
 	_PLAYER_FUNCS.autoplayBtn = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.autoplayBtn),
-		handleButton: function(e) {
-			if (!_AUTO_PLAY) {
-				_AUTO_PLAY = true;
-				_PLAYERROOT.classList.add('autoplay');
-			}
-			else {
-				_AUTO_PLAY = false;
-				_PLAYERROOT.classList.remove('autoplay');
-			}
-		}
+		handleButton: _autoPlayButtonHandler
 	}
 	_PLAYER_FUNCS.currentTimeDisplay = _getNodeByClass(_PLAYER_PARTS_SELECTORS.currentTimeDisplay);
 	_PLAYER_FUNCS.infoButton = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.infoButton),
-		disable: function(state) {
-			if (state) {
-				_PLAYER_FUNCS.infoButton.node.classList.remove('has-info');
-				_PLAYER_FUNCS.infoButton.node.disabled = true;
-			}
-			else {
-				_PLAYER_FUNCS.infoButton.node.classList.add('has-info');
-				_PLAYER_FUNCS.infoButton.node.disabled = false;
-			}
-		}
+		disable: _infoButtonHandler
 	}
 	_PLAYER_FUNCS.infoScreen = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.infoScreen),
-		close: function(fast) {
-			if (fast) {
-				_PLAYER_FUNCS.infoScreen.node.classList.add('fast');
-				setTimeout(function() {
-					_PLAYER_FUNCS.infoScreen.node.classList.remove('fast');
-				}, 500);
-			}
-			_PLAYER_FUNCS.infoScreen.node.classList.remove('play');
-		},
-		open: function() {
-			_PLAYER_FUNCS.infoScreen.node.classList.add('play');
-		},
-		toggle: function(e) {
-			if (_PLAYER_FUNCS.infoScreen.node.classList.contains('play')) {
-				_PLAYER_FUNCS.infoScreen.close();
-				// classList.remove('active');
-			}
-			else {
-				_PLAYER_FUNCS.infoScreen.open();
-				// classList.add('active');
-			}
-		}
+		close: _infoScreenCloseHandler,
+		open: _infoScreenOpenHandler,
+		toggle: _infoScreenToggler
 	}
 	_PLAYER_FUNCS.infoScroll = _getNodeByClass(_PLAYER_PARTS_SELECTORS.infoScroll);
 	_PLAYER_FUNCS.infoScrollContent = _getNodeByClass(_PLAYER_PARTS_SELECTORS.infoScrollContent);
 	_PLAYER_FUNCS.loadProgress = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.loadProgress),
 		reset: function() {
-			_PLAYER_FUNCS.loadProgress.setWidth('0');
+			this.setWidth('0');
 		},
 		setFullWidth: function(e) {
-			_PLAYER_FUNCS.loadProgress.setWidth('100%');
+			this.setWidth('100%');
 		},
 		setWidth: function(w) {
 			_PLAYER_FUNCS.loadProgress.node.style.width = w;
@@ -295,17 +329,17 @@ function _setUpFunctionality() {
 			_WEB_AUDIO.currentTime = e.target.value;
 		},
 		reset: function() {
-			_PLAYER_FUNCS.seekHandleBox.node.value = 0;
-			_PLAYER_FUNCS.seekHandleBox.toggleEnable(true);
+			this.node.value = 0;
+			this.toggleEnable(true);
 		},
 		setMax: function() {
-			_PLAYER_FUNCS.seekHandleBox.node.setAttribute('max', _WEB_AUDIO.seekable.end(0));
+			this.node.setAttribute('max', _WEB_AUDIO.seekable.end(0));
 		},
 		setPosition: function(val) {
-			_PLAYER_FUNCS.seekHandleBox.node.value = val;
+			this.node.value = val;
 		},
 		toggleEnable: function(status) {
-			_PLAYER_FUNCS.seekHandleBox.node.disabled = status;
+			this.node.disabled = status;
 		}
 	}
 	_PLAYER_FUNCS.screenTitle = _getNodeByClass(_PLAYER_PARTS_SELECTORS.screenTitle);
@@ -341,11 +375,11 @@ function _setUpFunctionality() {
 	}
 	_PLAYER_FUNCS.volumeSliderMute = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.volumeSliderMute),
-		close: () => {
+		close: function() {
 			_PLAYER_FUNCS.volumeButton.toggleActive();
 			_PLAYER_FUNCS.volumeSliderMute.node.classList.remove('play');
 		},
-		open: () => {
+		open: function() {
 			_PLAYER_FUNCS.volumeButton.toggleActive();
 			_PLAYER_FUNCS.volumeSliderMute.node.classList.add('play');
 		},
@@ -385,11 +419,12 @@ function _loadAllPlaylistsHandler(e) {
 	}
 
 	// Reset doesn't work unless we wait.
-	setTimeout(function() {
+	// await setTimeout(function() {
 		_PLAYER_FUNCS.volumeSliderMute.close();
 		_PLAYER_FUNCS.userScreen.reset();
+		_PLAYER_FUNCS.infoButton.disable(true);
 		_renderPlaylistsList();
-	}, 100);
+	// }, 100);
 }
 
 /**
@@ -746,11 +781,10 @@ function _loadTrack(ct) {
 
 	// Enable track info button if track has info
 	if (_PLAYLIST.tracks[_CURRENT_TRACK].info.length <= 0) {
-		_PLAYER_FUNCS.infoButton.disable(false);
+		_PLAYER_FUNCS.infoButton.disable(true);
 	}
 	else {
-		const content =
-			`<p>${_PLAYLIST.tracks[_CURRENT_TRACK].title}</p>
+		const content = `<p>${_PLAYLIST.tracks[_CURRENT_TRACK].title}</p>
 			${_PLAYLIST.tracks[_CURRENT_TRACK].info}`;
 		_populateInfoBoxContent(content);
 	}
@@ -801,7 +835,7 @@ function _populateTimeDisplay(current, remain) {
 }
 
 /**
- * Set all track in display list to NOT active by removing the class
+ * Set all tracks in display list to NOT active by removing the class
  *
  * @return {Void}
  */
@@ -867,6 +901,7 @@ function _setUpPlaylistDisplay() {
  *
  * @return {String} Shortened title
  */
+/* istanbul ignore next */
 function _makeShortTitle(titleStr) {
 	const cutoff = 50;
 

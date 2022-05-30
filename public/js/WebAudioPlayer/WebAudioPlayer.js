@@ -1,5 +1,6 @@
 import * as HttpClient from './components/HttpClient.js';
 import { playlists } from './components/playlists.js';
+import * as logger from './components/logger.js';
 /**
  * HTML5 JavaScript Audio Player v0.6.
  *
@@ -9,6 +10,8 @@ import { playlists } from './components/playlists.js';
  * @package HTML5 JavaScript Audio Player
  * @version 0.6
  */
+export const version		= '0.6';
+ 
 let _DOC;
 let _AUDIO_CODECS_MIMES     = {
 	mp3: ['audio/mpeg', 'audio/MPA', 'audio/mpa-robust','audio/mpeg3','audio/x-mpeg-3'],
@@ -73,8 +76,6 @@ let _PLAYER_FUNCS			= {
     volumeSlider: {}
 }
 
-export const version		= '0.6';
-
 /**
  * Public Methods
  ---------------------------------------------------------------------*/
@@ -86,13 +87,14 @@ export const version		= '0.6';
   * @param {String} id DOM node id attribute for your player.
   * @returns {HTMLWebAudioElement}
   */
+/* istanbul ignore next */
 export const startup = (id) => {
 	let audio;
-	const la = (e) => {
+	const cb = (e) => {
 		const playerNode = window.document.getElementById(id);
 		audio = init(playerNode, window.document);
 	}
-	window.document.addEventListener('DOMContentLoaded', la);
+	window.document.addEventListener('DOMContentLoaded', cb);
 
 	return audio;
 }
@@ -145,7 +147,7 @@ export const startup = (id) => {
 		return _WEB_AUDIO;
 	}
 	catch (err) {
-		// console.error(err);
+		logger.error('Failed to initiate the Web Audio Player :(');
 	}
 }
 
@@ -164,81 +166,116 @@ function _getNodeByClass(className) {
 }
 
 /**
+ * 
+ * @param {Boolean} state 
+ */
+function ajaxSpinnerToggler(state) {
+	if (state) {
+		_PLAYER_FUNCS.ajaxSpinner.node.classList.add('play');
+	}
+	else {
+		_PLAYER_FUNCS.ajaxSpinner.node.classList.remove('play');
+	}
+}
+
+/**
+ * 
+ * @param {DOM Event} e 
+ */
+function autoPlayButtonHandler(e) {
+	if (!_AUTO_PLAY) {
+		_AUTO_PLAY = true;
+		_PLAYERROOT.classList.add('autoplay');
+	}
+	else {
+		_AUTO_PLAY = false;
+		_PLAYERROOT.classList.remove('autoplay');
+	}
+}
+
+/**
+ * 
+ * @param {Boolean} state 
+ */
+function infoButtonHandler(state) {
+	if (state) {
+		_PLAYER_FUNCS.infoButton.node.classList.remove('has-info');
+		_PLAYER_FUNCS.infoButton.node.disabled = true;
+	}
+	else {
+		_PLAYER_FUNCS.infoButton.node.classList.add('has-info');
+		_PLAYER_FUNCS.infoButton.node.disabled = false;
+	}
+}
+
+/**
+ * 
+ * @param {Boolean} fast 
+ */
+function infoScreenCloseHandler(fast) {
+	if (fast) {
+		_PLAYER_FUNCS.infoScreen.node.classList.add('fast');
+		setTimeout(function() {
+			_PLAYER_FUNCS.infoScreen.node.classList.remove('fast');
+		}, 500);
+	}
+	_PLAYER_FUNCS.infoScreen.node.classList.remove('play');
+}
+
+/**
+ * 
+ */
+function infoScreenOpenHandler() {
+	_PLAYER_FUNCS.infoScreen.node.classList.add('play');
+}
+
+/**
+ * 
+ * @param {DOM Event} e 
+ */
+function infoScreenToggler(e) {
+	if (_PLAYER_FUNCS.infoScreen.node.classList.contains('play')) {
+		_PLAYER_FUNCS.infoScreen.close();
+		// classList.remove('active');
+	}
+	else {
+		_PLAYER_FUNCS.infoScreen.open();
+		// classList.add('active');
+	}
+}
+
+/**
  * Define all the functionality the player UI needs.
  */
 function _setUpFunctionality() {
 	_PLAYER_FUNCS.ajaxSpinner = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.ajaxSpinner),
-		toggle: function(state) {
-			if (state) {
-				_PLAYER_FUNCS.ajaxSpinner.node.classList.add('play');
-			}
-			else {
-				_PLAYER_FUNCS.ajaxSpinner.node.classList.remove('play');
-			}
-		}
+		toggle: ajaxSpinnerToggler
 	}
 	_PLAYER_FUNCS.autoplayBtn = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.autoplayBtn),
-		handleButton: function(e) {
-			if (!_AUTO_PLAY) {
-				_AUTO_PLAY = true;
-				_PLAYERROOT.classList.add('autoplay');
-			}
-			else {
-				_AUTO_PLAY = false;
-				_PLAYERROOT.classList.remove('autoplay');
-			}
-		}
+		handleButton: autoPlayButtonHandler
 	}
 	_PLAYER_FUNCS.currentTimeDisplay = _getNodeByClass(_PLAYER_PARTS_SELECTORS.currentTimeDisplay);
 	_PLAYER_FUNCS.infoButton = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.infoButton),
-		disable: function(state) {
-			if (state) {
-				_PLAYER_FUNCS.infoButton.node.classList.remove('has-info');
-				_PLAYER_FUNCS.infoButton.node.disabled = true;
-			}
-			else {
-				_PLAYER_FUNCS.infoButton.node.classList.add('has-info');
-				_PLAYER_FUNCS.infoButton.node.disabled = false;
-			}
-		}
+		disable: infoButtonHandler
 	}
 	_PLAYER_FUNCS.infoScreen = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.infoScreen),
-		close: function(fast) {
-			if (fast) {
-				_PLAYER_FUNCS.infoScreen.node.classList.add('fast');
-				setTimeout(function() {
-					_PLAYER_FUNCS.infoScreen.node.classList.remove('fast');
-				}, 500);
-			}
-			_PLAYER_FUNCS.infoScreen.node.classList.remove('play');
-		},
-		open: function() {
-			_PLAYER_FUNCS.infoScreen.node.classList.add('play');
-		},
-		toggle: function(e) {
-			if (_PLAYER_FUNCS.infoScreen.node.classList.contains('play')) {
-				_PLAYER_FUNCS.infoScreen.close();
-				// classList.remove('active');
-			}
-			else {
-				_PLAYER_FUNCS.infoScreen.open();
-				// classList.add('active');
-			}
-		}
+		close: infoScreenCloseHandler,
+		open: infoScreenOpenHandler,
+		toggle: infoScreenToggler
 	}
 	_PLAYER_FUNCS.infoScroll = _getNodeByClass(_PLAYER_PARTS_SELECTORS.infoScroll);
 	_PLAYER_FUNCS.infoScrollContent = _getNodeByClass(_PLAYER_PARTS_SELECTORS.infoScrollContent);
 	_PLAYER_FUNCS.loadProgress = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.loadProgress),
 		reset: function() {
-			_PLAYER_FUNCS.loadProgress.setWidth('0');
+			this.setWidth('0');
 		},
 		setFullWidth: function(e) {
-			_PLAYER_FUNCS.loadProgress.setWidth('100%');
+			this.setWidth('100%');
 		},
 		setWidth: function(w) {
 			_PLAYER_FUNCS.loadProgress.node.style.width = w;
@@ -292,17 +329,17 @@ function _setUpFunctionality() {
 			_WEB_AUDIO.currentTime = e.target.value;
 		},
 		reset: function() {
-			_PLAYER_FUNCS.seekHandleBox.node.value = 0;
-			_PLAYER_FUNCS.seekHandleBox.toggleEnable(true);
+			this.node.value = 0;
+			this.toggleEnable(true);
 		},
 		setMax: function() {
-			_PLAYER_FUNCS.seekHandleBox.node.setAttribute('max', _WEB_AUDIO.seekable.end(0));
+			this.node.setAttribute('max', _WEB_AUDIO.seekable.end(0));
 		},
 		setPosition: function(val) {
-			_PLAYER_FUNCS.seekHandleBox.node.value = val;
+			this.node.value = val;
 		},
 		toggleEnable: function(status) {
-			_PLAYER_FUNCS.seekHandleBox.node.disabled = status;
+			this.node.disabled = status;
 		}
 	}
 	_PLAYER_FUNCS.screenTitle = _getNodeByClass(_PLAYER_PARTS_SELECTORS.screenTitle);
@@ -317,15 +354,8 @@ function _setUpFunctionality() {
 	}
 	_PLAYER_FUNCS.volumeButton = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.volumeButton),
-		toggleActive: function(toggle) {
-			toggle = typeof toggle == 'undefined' ? null : toggle;
-
-			if (_PLAYER_FUNCS.volumeButton.node.classList.contains('active') || toggle === false) {
-				_PLAYER_FUNCS.volumeButton.node.classList.remove('active');
-			}
-			else {
-				_PLAYER_FUNCS.volumeButton.node.classList.add('active');
-			}
+		toggleActive: function() {
+			_PLAYER_FUNCS.volumeButton.node.classList.toggle('active');
 		},
 		toggleMute: function(e) {
 			// Unmute
@@ -334,8 +364,8 @@ function _setUpFunctionality() {
 				_PLAYER_FUNCS.volumeSlider.setPosition(_SAVEDVOLUME);
 				_PLAYERROOT.classList.remove('muted');
 			}
-			else
-			{
+			// Mute
+			else {
 				_SAVEDVOLUME = _WEB_AUDIO.volume;
 				_WEB_AUDIO.muted = true;
 				_PLAYER_FUNCS.volumeSlider.setPosition(0);
@@ -346,7 +376,7 @@ function _setUpFunctionality() {
 	_PLAYER_FUNCS.volumeSliderMute = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.volumeSliderMute),
 		close: function() {
-			_PLAYER_FUNCS.volumeButton.toggleActive(false);
+			_PLAYER_FUNCS.volumeButton.toggleActive();
 			_PLAYER_FUNCS.volumeSliderMute.node.classList.remove('play');
 		},
 		open: function() {
@@ -362,13 +392,15 @@ function _setUpFunctionality() {
 			}
 		}
 	}
+	/* istanbul ignore next */
 	_PLAYER_FUNCS.volumeSlider = {
 		node: _getNodeByClass(_PLAYER_PARTS_SELECTORS.volumeSlider),
 		handleInput: function(e) {
 			_WEB_AUDIO.volume = e.target.value;
 		},
 		setPosition: function(v) {
-			_PLAYER_FUNCS.volumeSlider.node.value = v > 1 ? 1 : v;
+			const vol = parseInt(v);
+			_PLAYER_FUNCS.volumeSlider.node.value = vol > 1 ? 1 : vol;
 		}
 	}
 }
@@ -378,6 +410,7 @@ function _setUpFunctionality() {
  *
  * @param {DOM Event} e 
  */
+/* istanbul ignore next */
 function _loadAllPlaylistsHandler(e) {
 	_togglePlayerButtons(true);
 
@@ -414,6 +447,7 @@ function _attachEvents(node, event, handler) {
  * @param {String} type 
  * @returns 
  */
+/* istanbul ignore next */
 function _canPlayType(type) {
 	return _WEB_AUDIO.canPlayType(type);
 }
@@ -453,6 +487,7 @@ function _checkWebAudioApiSupport() {
  * @param {Array} types List of mime types
  * @returns {Boolean|String} If not false, returns the audio mime.
  */
+/* istanbul ignore next */
 function _checkMimeSupport() {
 	var ans = '';
 
@@ -745,11 +780,10 @@ function _loadTrack(ct) {
 
 	// Enable track info button if track has info
 	if (_PLAYLIST.tracks[_CURRENT_TRACK].info.length <= 0) {
-		_PLAYER_FUNCS.infoButton.disable(false);
+		_PLAYER_FUNCS.infoButton.disable(true);
 	}
 	else {
-		const content =
-			`<p>${_PLAYLIST.tracks[_CURRENT_TRACK].title}</p>
+		const content = `<p>${_PLAYLIST.tracks[_CURRENT_TRACK].title}</p>
 			${_PLAYLIST.tracks[_CURRENT_TRACK].info}`;
 		_populateInfoBoxContent(content);
 	}
@@ -800,7 +834,7 @@ function _populateTimeDisplay(current, remain) {
 }
 
 /**
- * Set all track in display list to NOT active by removing the class
+ * Set all tracks in display list to NOT active by removing the class
  *
  * @return {Void}
  */
@@ -866,6 +900,7 @@ function _setUpPlaylistDisplay() {
  *
  * @return {String} Shortened title
  */
+/* istanbul ignore next */
 function _makeShortTitle(titleStr) {
 	const cutoff = 50;
 

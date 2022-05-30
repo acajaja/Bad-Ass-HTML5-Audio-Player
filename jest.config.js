@@ -14,13 +14,15 @@ module.exports = {
   // cacheDirectory: "/tmp/jest_rs",
 
   // Automatically clear mock calls, instances and results before every test
-  clearMocks: true,
+  clearMocks: false,
 
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
+  collectCoverageFrom: [
+    "<rootDir>/src/**/*.js"
+  ],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
@@ -42,7 +44,14 @@ module.exports = {
   // ],
 
   // An object that configures minimum threshold enforcement for coverage results
-  // coverageThreshold: undefined,
+  coverageThreshold: {
+    "global": {
+      "branches": 60,
+      "functions": 80,
+      "lines": 80,
+      "statements": -50
+    }
+  },
 
   // A path to a custom dependency extractor
   // dependencyExtractor: undefined,
@@ -147,15 +156,18 @@ module.exports = {
 
   // The glob patterns Jest uses to detect test files
   testMatch: [
-    "**/__tests__/**/*.[jt]s?(x)",
-    "**/?(*.)+(spec|test).[tj]s?(x)"
+    // "<rootDir>/__tests__/**/*.[jt]s?",
+    "<rootDir>/__tests__/**/?(*.)+(test).js"
   ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: [
     "/node_modules/",
-    "/__tests__\/Stubs/",
-    "/__tests__\/coverage/"
+    "<rootDir>/__tests__/Stubs/",
+    "<rootDir>/__tests__/audio/",
+    "<rootDir>/__mocks__/",
+    "<rootDir>/__tests__/__snapshots__/",
+    "<rootDir>/__tests__/coverage/"
   ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files

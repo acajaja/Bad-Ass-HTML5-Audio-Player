@@ -25,6 +25,7 @@
     "jest-environment-jsdom": "^27.5.1",
     "jsdom": "^19.0.0",
     "nodemon": "^2.0.15",
+    "randomstring": "^1.2.2",
     "regenerator-runtime": "^0.13.9",
     "webpack-cli": "^4.9.2",
     "webpack-obfuscator": "^3.5.1"

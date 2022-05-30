@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { PLAYLIST_BASE_URL } from './vars.js'
 export const playlists = [
 	{
