@@ -22,7 +22,7 @@ module.exports = (env, argv) => {
   let baseConfig = {
     devtool: isProd ? 'source-map' : 'inline-source-map',
     mode: process.env.NODE_ENV,
-    entry: ["regenerator-runtime/runtime.js", `${baseJsDir}/WebAudioPlayer.js`],
+    entry: ["regenerator-runtime/runtime.js", `${baseJsDir}/WebAudioPlayer/WebAudioPlayer.js`],
     output: {
       /////////////////////
       // Deletes everything
@@ -33,17 +33,17 @@ module.exports = (env, argv) => {
       path: outputBaseDir
     },
     module: {
-      rules: [
-        {
-            exclude: nodeModsPath,
-            loader: 'babel-loader',
-            test: /\.js$/,
-            options: {
-                presets: ['@babel/preset-env'],
-                targets: 'defaults'
-            }
-        }
-      ]
+      // rules: [
+      //   {
+      //       exclude: nodeModsPath,
+      //       loader: 'babel-loader',
+      //       test: /\.js$/,
+      //       options: {
+      //           presets: ['@babel/preset-env'],
+      //           targets: 'defaults'
+      //       }
+      //   }
+      // ]
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -56,27 +56,17 @@ module.exports = (env, argv) => {
     return baseConfig;
   }
 
-  baseConfig.plugins.push(new WebpackObfuscator());
-  baseConfig.module.rules.push({
-    test: /designer\.js$/,
-    enforce: 'post',
-    use: { 
-        loader: WebpackObfuscator.loader, 
-        options: {
-          log: true
-        }
-    }
-  });
-  baseConfig.module.rules.push({
-    test: /grid\.js$/,
-    enforce: 'post',
-    use: { 
-        loader: WebpackObfuscator.loader, 
-        options: {
-          log: true
-        }
-    }
-  });
+  // baseConfig.plugins.push(new WebpackObfuscator());
+  // baseConfig.module.rules.push({
+  //   test: /WebAudioPlayer\.js$/,
+  //   enforce: 'post',
+  //   use: { 
+  //       loader: WebpackObfuscator.loader, 
+  //       options: {
+  //         log: true
+  //       }
+  //   }
+  // });
 
   return baseConfig;
 }

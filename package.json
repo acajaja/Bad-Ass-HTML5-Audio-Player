@@ -18,6 +18,7 @@
     "@babel/plugin-syntax-import-assertions": "^7.17.12",
     "@babel/preset-env": "^7.16.11",
     "babel-loader": "^8.2.4",
+    "babel-minify": "^0.5.2",
     "babel-plugin-rewire": "^1.2.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
@@ -27,6 +28,7 @@
     "nodemon": "^2.0.15",
     "randomstring": "^1.2.2",
     "regenerator-runtime": "^0.13.9",
+    "uglify-js": "^3.15.5",
     "webpack-cli": "^4.9.2",
     "webpack-obfuscator": "^3.5.1"
   }

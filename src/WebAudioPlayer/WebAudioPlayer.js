@@ -6,7 +6,7 @@ import * as logger from './components/logger.js';
  *
  * Designed to play any supported audio type.
  *
- * @copyright © 2013,2022 Clif Jackson
+ * @copyright © 2013,2017,2022 Clif Jackson
  * @package HTML5 JavaScript Audio Player
  * @version 0.6
  */
