@@ -1,11 +1,11 @@
 'use strict'
 
 const path = require('path');
-const WebpackObfuscator = require('webpack-obfuscator');
-const baseJsDir = './src';
+const baseJsDir = path.resolve(__dirname, 'src');
 const outputBaseDir = path.resolve(__dirname, 'dist');
 const nodeModsPath = path.resolve(__dirname, 'node_modules');
 const webpack = require('webpack');
+const TerserPlugin = require("terser-webpack-plugin");
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -19,54 +19,38 @@ else {
 module.exports = (env, argv) => {
   const isProd = process.env.NODE_ENV === 'production';
 
-  let baseConfig = {
+  return {
     devtool: isProd ? 'source-map' : 'inline-source-map',
     mode: process.env.NODE_ENV,
-    entry: ["regenerator-runtime/runtime.js", `${baseJsDir}/WebAudioPlayer/WebAudioPlayer.js`],
+    entry: [
+      'regenerator-runtime/runtime.js',
+      `${baseJsDir}/WebAudioPlayer/WebAudioPlayer.js`
+    ],
     output: {
       /////////////////////
       // Deletes everything
       // in the output dir
       clean: true, ////////
       /////////////////////
-      filename: `WebAudioPlayer.init.js`,
+      filename: `WebAudioPlayer.min.js`,
       path: outputBaseDir
     },
-    module: {
-      // rules: [
-      //   {
-      //       exclude: nodeModsPath,
-      //       loader: 'babel-loader',
-      //       test: /\.js$/,
-      //       options: {
-      //           presets: ['@babel/preset-env'],
-      //           targets: 'defaults'
-      //       }
-      //   }
-      // ]
+    optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin({
+        terserOptions: {
+          ecma: 2021,
+          mangle: false,
+          keep_classnames: true,
+          keep_fnames: true,
+          module: true
+        }
+      })]
     },
     plugins: [
       new webpack.DefinePlugin({
           'process.env.PLAYLIST_BASE_URL': JSON.stringify(process.env.PLAYLIST_BASE_URL)
       })
     ]
-  };
-
-  if (!isProd) {
-    return baseConfig;
   }
-
-  // baseConfig.plugins.push(new WebpackObfuscator());
-  // baseConfig.module.rules.push({
-  //   test: /WebAudioPlayer\.js$/,
-  //   enforce: 'post',
-  //   use: { 
-  //       loader: WebpackObfuscator.loader, 
-  //       options: {
-  //         log: true
-  //       }
-  //   }
-  // });
-
-  return baseConfig;
 }

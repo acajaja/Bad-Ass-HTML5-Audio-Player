@@ -1,0 +1,9 @@
+#!/bin/bash
+
+npx terser src/WebAudioPlayer/WebAudioPlayer.js \
+    -o dist/WebAudioPlayer.min.js \
+    -c keep_classnames=true,keep_fnames=true,drop_console=true,ecma=2021,module=true \
+    --source-map
+# NODE_ENV=production webpack
+
+exit $?
