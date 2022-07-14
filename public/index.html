@@ -2,10 +2,10 @@
 <html lang="en-us">
 <head>
 <meta charset="UTF-8">
-<title>Bad Ass Web Audio Player</title>
+<title>Bad Ass Web Audio Player Test Page</title>
 <script type="module">
 import { startup } from './js/WebAudioPlayer/WebAudioPlayer.min.js'
-const myBoomBox = startup('my-boom-box')
+startup('my-boom-box')
 </script>
 <style type="text/css">
 html {
@@ -62,7 +62,11 @@ li.current button {
 
 <body>
 
-<div class="web-audio-player my-minidisk-skin" id="my-boom-box">
+<div
+    class="web-audio-player my-minidisk-skin"
+    id="my-boom-box"
+    data-playlists-url="http://127.0.0.1:8081/js/playlists.json"
+    >
     <div class="player-bg-box">
         <div class="outer-circle-bg"></div>
         <div class="outer-circle-frame"></div>

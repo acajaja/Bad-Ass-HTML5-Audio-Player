@@ -11,17 +11,15 @@
   "scripts": {
     "build:dev": "./scripts/build.sh",
     "build:prod": "./scripts/build:prod.sh",
+    "build:wp": "NODE_ENV=development webpack",
     "dev": "NODE_ENV=development nodemon -w ./src -w ./public -V ./server.js",
     "test": "NODE_ENV=test jest --watch --detectOpenHandles"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-import-assertions": "^7.17.12",
-    "@babel/preset-env": "^7.16.11",
-    "babel-loader": "^8.2.4",
-    "babel-minify": "^0.5.2",
     "babel-plugin-rewire": "^1.2.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "express-minify": "^1.0.0",
     "got": ">=11.8.5",
     "jest": "^27.5.1",
     "jest-environment-jsdom": "^27.5.1",
@@ -29,7 +27,6 @@
     "nodemon": "^2.0.15",
     "randomstring": "^1.2.2",
     "regenerator-runtime": "^0.13.9",
-    "terser": "^5.14.1",
     "terser-webpack-plugin": "^5.3.3",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0"

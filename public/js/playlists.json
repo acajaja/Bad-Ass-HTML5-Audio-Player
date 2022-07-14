@@ -1,0 +1,30 @@
+[
+    {
+        "name":"East 3rd Street Ensemble Samples",
+        "url":"http://127.0.0.1:8081/playlists/east-third-st.json"
+    },
+    {
+        "name":"Prajna Samples",
+        "url":"http://127.0.0.1:8081/playlists/prajna.json"
+    },
+    {
+        "name":"Zuk - An Evening in the Clouds",
+        "url":"http://127.0.0.1:8081/playlists/zuk.json"
+    },
+    {
+        "name":"1975: An Underground Epic Samples",
+        "url":"http://127.0.0.1:8081/playlists/1975.json"
+    },
+    {
+        "name":"Round Robin Sample",
+        "url":"http://127.0.0.1:8081/playlists/round-robin.json"
+    },
+    {
+        "name":"Marim-bass Samples",
+        "url":"http://127.0.0.1:8081/playlists/marim-bass.json"
+    },
+    {
+        "name":"Acoustic Mayhem Sample",
+        "url":"http://127.0.0.1:8081/playlists/acoustic-mayhem.json"
+    }
+]

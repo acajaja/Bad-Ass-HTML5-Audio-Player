@@ -1,5 +1,5 @@
 import * as HttpClient from './components/HttpClient.js';
-import { playlists } from './components/playlists.js';
+// import { playlists } from './components/playlists.js';
 import * as logger from './components/logger.js';
 /**
  * HTML5 JavaScript Audio Player v0.6.
@@ -27,6 +27,7 @@ let _HTML5_SUPPORT			= false;
 let _PLAYERROOT				= null;
 let _PLAYER_CONTROL_NODES	= [];
 let _PLAYLIST               = null;
+let _PLAYLISTS              = [];
 let _TRACK_COUNT			= 0;
 let _SAVEDVOLUME			= 0;
 let _PLAYER_PARTS_SELECTORS = {
@@ -89,18 +90,15 @@ let _PLAYER_FUNCS			= {
   */
 /* istanbul ignore next */
 export const startup = (id) => {
-	let audio;
 	const cb = (e) => {
 		const playerNode = window.document.getElementById(id);
-		audio = init(playerNode, window.document);
+		init(playerNode, window.document);
 	}
 	window.document.addEventListener('DOMContentLoaded', cb);
-
-	return audio;
 }
 
 /**
- * Initialize the player
+ * Initialize the player.
  *
  * @return {HTMLWebAudioElement}
  */
@@ -147,6 +145,7 @@ export const startup = (id) => {
 		return _WEB_AUDIO;
 	}
 	catch (err) {
+		logger.error(err);
 		logger.error('Failed to initiate the Web Audio Player :(');
 	}
 }
@@ -660,16 +659,18 @@ async function _playlistButtonHandler(e) {
  *
  * @returns {Void}
  */
-function _renderPlaylistsList() {
-	if (typeof playlists == 'undefined' || playlists == null || playlists.length <= 0) {
-		throw new Error('No playlists found! See ./components/playlists.js');
+async function _renderPlaylistsList() {
+	const playlistsUrl = new URL(_PLAYERROOT.dataset.playlistsUrl);
+
+	if (_PLAYLISTS.length === 0) {
+		_PLAYLISTS = await HttpClient.get(playlistsUrl.href);
 	}
 
     _PLAYER_FUNCS.playlistBtn.node.classList.add('active');
 	_updateScreenTitle('Playlists');
 	_empty(_PLAYER_FUNCS.playlistBox);
 
-	for (const playlist of playlists) {
+	for (const playlist of _PLAYLISTS) {
 		const button = _DOC.createElement('button');
 		const li = _DOC.createElement('li');
 
