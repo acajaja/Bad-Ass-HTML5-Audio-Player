@@ -1,16 +1,15 @@
 import * as HttpClient from './components/HttpClient.js';
-// import { playlists } from './components/playlists.js';
 import * as logger from './components/logger.js';
 /**
- * HTML5 JavaScript Audio Player v0.6.
+ * Web Audio JavaScript Audio Player v0.7.
  *
  * Designed to play any supported audio type.
  *
  * @copyright © 2013,2017,2022 Clif Jackson
- * @package HTML5 JavaScript Audio Player
- * @version 0.6
+ * @package Web Audio JavaScript Audio Player
+ * @version 0.7
  */
-export const version		= '0.6';
+export const version		= '0.7';
  
 let _DOC;
 let _AUDIO_CODECS_MIMES     = {
