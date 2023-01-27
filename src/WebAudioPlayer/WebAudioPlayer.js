@@ -1,5 +1,6 @@
-import * as HttpClient from './components/HttpClient.js';
-import * as logger from './components/logger.js';
+import * as FeatureDetection from './components/FeatureDetection';
+import * as HttpClient from './components/HttpClient';
+import logger from './components/logger';
 /**
  * Web Audio JavaScript Audio Player v0.7.
  *
@@ -10,7 +11,7 @@ import * as logger from './components/logger.js';
  * @version 0.7
  */
 export const version		= '0.7';
- 
+
 let _DOC;
 let _AUDIO_CODECS_MIMES     = {
 	mp3: ['audio/mpeg', 'audio/MPA', 'audio/mpa-robust','audio/mpeg3','audio/x-mpeg-3'],
@@ -22,7 +23,6 @@ let _AUDIO_CODECS_MIMES     = {
 let _WEB_AUDIO 				= null;
 let _AUTO_PLAY				= false;
 let _CURRENT_TRACK      	= null;
-let _HTML5_SUPPORT			= false;
 let _PLAYERROOT				= null;
 let _PLAYER_CONTROL_NODES	= [];
 let _PLAYLIST               = null;
@@ -90,8 +90,8 @@ let _PLAYER_FUNCS			= {
 /* istanbul ignore next */
 export const startup = (id) => {
 	const cb = (e) => {
-		const playerNode = window.document.getElementById(id);
-		init(playerNode, window.document);
+		const playerRoot = window.document.getElementById(id);
+		init(playerRoot, window.document);
 	}
 	window.document.addEventListener('DOMContentLoaded', cb);
 }
@@ -101,13 +101,12 @@ export const startup = (id) => {
  *
  * @return {HTMLWebAudioElement}
  */
- export const init = (playerNode, doc, audio = null) => {
-	_PLAYERROOT	   = playerNode;
-	_DOC		   = doc;
-	_HTML5_SUPPORT = _checkWebAudioApiSupport();
+export const init = (playerRoot, win = window, audio = null) => {
+	_PLAYERROOT	   		= playerRoot;
+	_DOC		   		= win.document;
 
-	try {
-		if (!_HTML5_SUPPORT) {
+	// try {
+		if (!FeatureDetection.checkWebAudioApiSupport()) {
 			throw new Error('Web Audio is not supported on your device :(');
 		}
 
@@ -142,11 +141,11 @@ export const startup = (id) => {
 		_renderPlaylistsList();
 
 		return _WEB_AUDIO;
-	}
-	catch (err) {
-		logger.error(err);
-		logger.error('Failed to initiate the Web Audio Player :(');
-	}
+	// }
+	// catch (err) {
+	// 	logger.error(err);
+	// 	logger.error('Failed to initiate the Web Audio Player :(');
+	// }
 }
 
 /**
@@ -426,7 +425,7 @@ function _loadAllPlaylistsHandler(e) {
 }
 
 /**
- * Comvenience method for attaching event handlers to DOM node.
+ * Convenience method for attaching event handlers to DOM nodes.
  *
  * @param {DOM Node} node DOM Node to attach event to.
  * @param {String} event DOM event to attach to.
@@ -452,21 +451,11 @@ function _canPlayType(type) {
 }
 
 /**
- * Check if the browser supprts the Web Audio element.
- *
- * @returns {Boolean} true if supported, false otherwise.
- */
-function _checkWebAudioApiSupport() {
-	const type = typeof Audio;
-	return (type == 'function' || type == 'object');
-}
-
-/**
  * Connect player buttons
  *
  * @returns {Void}
  */
- function _connectPlayerButtons() {
+function _connectPlayerButtons() {
 	_attachEvents(_PLAYER_FUNCS.autoplayBtn.node, 'click', _PLAYER_FUNCS.autoplayBtn.handleButton);
 	_attachEvents(_PLAYER_FUNCS.infoButton.node, 'click', _PLAYER_FUNCS.infoScreen.toggle);
 	_attachEvents(_PLAYER_FUNCS.nextTrackBtn.node, 'click', _PLAYER_FUNCS.nextTrackBtn.handleButton);
@@ -599,7 +588,7 @@ function _getPrevTrack() {
  * @param {String} pl Path to load playlist from via AJAX
  * @return {JSON}
  */
- async function _loadPlaylist(pl) {
+async function _loadPlaylist(pl) {
 	if (typeof pl != 'string' || pl.length <= 0) {
 		throw new Error('No playlist has been defined!');
 	}
@@ -637,7 +626,7 @@ async function _playlistButtonHandler(e) {
  * @param {Object} JSON Playlist.
  * @returns {Void}
  */
- function _handlePlaylist(pl) {
+function _handlePlaylist(pl) {
 	// pl = JSON.parse(JSON.stringify(pl));
 
 	_togglePlayerButtons(false);

@@ -1,8 +1,8 @@
-jest.mock('../src/WebAudioPlayer/components/HttpClient.js');
-import * as HttpClient from '../src/WebAudioPlayer/components/HttpClient';
-import { getMockJsonPLaylist } from './Stubs/MockJson';
-import * as WebAudioPlayer from '../src/WebAudioPlayer/WebAudioPlayer';
-import { _checkHtml5AudioSupport, __RewireAPI__ as WebAudioPlayerRewireAPI } from '../src/WebAudioPlayer/WebAudioPlayer';
+jest.mock('../../../src/WebAudioPlayer/components/HttpClient.js');
+import * as HttpClient from '../../../src/WebAudioPlayer/components/HttpClient';
+import { getMockJsonPLaylist } from '../../Stubs/MockJson';
+import * as WebAudioPlayer from '../../../src/WebAudioPlayer/WebAudioPlayer';
+import { _checkHtml5AudioSupport, __RewireAPI__ as WebAudioPlayerRewireAPI } from '../../../src/WebAudioPlayer/WebAudioPlayer';
 
 describe('Web Audio Player UI Tests - Info Screen', () => {
     const path      = require('path');
@@ -15,23 +15,24 @@ describe('Web Audio Player UI Tests - Info Screen', () => {
         const mockJson = getMockJsonPLaylist('Ttttt');
         HttpClient.get.mockImplementationOnce(async () => await Promise.resolve(mockJson));
 
-        audioPage = await JSDOM.fromFile(path.resolve(__dirname, 'Stubs/audio-player.html'));
+        audioPage = await JSDOM.fromFile(path.resolve(__dirname, '../../Stubs/audio-player.html'));
         audioPage.window.HTMLAudioElement.addEventListener = jest.fn((event, callback) => {
             audioPage.window.HTMLAudioElement[event] = jest.fn(callback);
         });
         audioPage.window.HTMLAudioElement['load'] = jest.fn();
         audioPage.window.HTMLAudioElement['play'] = jest.fn(async () => { await 1 + 1; });
+        audioPage.window.HTMLAudioElement['canPlayType'] = jest.fn(() => 'probably');
         audioPage.window.HTMLAudioElement['seekable'] = {end: jest.fn()};
-        WebAudioPlayerRewireAPI.__Rewire__('_canPlayType', () => {
-            return 'probably';
-        });
-        WebAudioPlayerRewireAPI.__Rewire__('_checkWebAudioApiSupport', () => {
-            return true;
-        });
+        // WebAudioPlayerRewireAPI.__Rewire__('_canPlayType', () => {
+        //     return 'probably';
+        // });
+        // WebAudioPlayerRewireAPI.__Rewire__('_checkWebAudioApiSupport', () => {
+        //     return true;
+        // });
 
         playaNode   = audioPage.window.document.getElementById('my-boom-box');
         result      = WebAudioPlayer.init(
-            playaNode, audioPage.window.document, audioPage.window.HTMLAudioElement);
+            playaNode, audioPage.window, audioPage.window.HTMLAudioElement);
     });
 
     afterEach(() => {
