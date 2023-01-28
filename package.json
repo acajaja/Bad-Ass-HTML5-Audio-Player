@@ -1,9 +1,15 @@
 {
-  "name": "bad-ass-html5-audio-player",
-  "version": "0.6",
-  "author": "Clif Jackson",
+  "name": "bad-ass-web-audio-player",
+  "version": "0.7",
+  "author": {
+    "name": "Clif Jackson",
+    "email": "cj3@clifjackson.net"
+  },
   "description": "Web Audio player that utlilizes user-created JSON playlists.",
-  "keywords": "audio,web,HTML5",
+  "keywords": ["audio","web","HTML5"],
+  "bugs": {
+    "email": "acajaja@jazzopetry.net"
+  },
   "homepage": "",
   "license": "MIT",
   "private": true,

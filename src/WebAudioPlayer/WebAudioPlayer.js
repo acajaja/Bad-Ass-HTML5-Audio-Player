@@ -105,47 +105,41 @@ export const init = (playerRoot, win = window, audio = null) => {
 	_PLAYERROOT	   		= playerRoot;
 	_DOC		   		= win.document;
 
-	// try {
-		if (!FeatureDetection.checkWebAudioApiSupport()) {
-			throw new Error('Web Audio is not supported on your device :(');
-		}
+	if (!FeatureDetection.checkWebAudioApiSupport()) {
+		throw new Error('Web Audio is not supported on your device :(');
+	}
 
-		_PLAYERROOT.classList.add('paused');
-		_setAudioObject(audio);
+	_PLAYERROOT.classList.add('paused');
+	_setAudioObject(audio);
 
-        if (!_checkMimeSupport()) {
-            throw new Error('There is no audio codec supported for this device.');
-        }
+    if (!_checkMimeSupport()) {
+        throw new Error('There is no audio codec supported for this device.');
+    }
 
-		_setUpFunctionality();
-		_PLAYER_CONTROL_NODES = [
-			_PLAYER_FUNCS.autoplayBtn.node,
-			_PLAYER_FUNCS.playBtn.node,
-			_PLAYER_FUNCS.prevTrackBtn.node,
-			_PLAYER_FUNCS.muteButton.node,
-			_PLAYER_FUNCS.nextTrackBtn.node,
-			_PLAYER_FUNCS.seekHandleBox.node,
-			_PLAYER_FUNCS.volumeSlider.node
-		];
-		_togglePlayerButtons(true);
+	_setUpFunctionality();
+	_PLAYER_CONTROL_NODES = [
+		_PLAYER_FUNCS.autoplayBtn.node,
+		_PLAYER_FUNCS.playBtn.node,
+		_PLAYER_FUNCS.prevTrackBtn.node,
+		_PLAYER_FUNCS.muteButton.node,
+		_PLAYER_FUNCS.nextTrackBtn.node,
+		_PLAYER_FUNCS.seekHandleBox.node,
+		_PLAYER_FUNCS.volumeSlider.node
+	];
+	_togglePlayerButtons(true);
 
-        // Initialize volume
-		_PLAYER_FUNCS.volumeSlider.setPosition(1);
-		// Initialize audio seek position
-        _PLAYER_FUNCS.seekHandleBox.setPosition(0);
-		// Disable the info button until something is loaded
-		_PLAYER_FUNCS.infoButton.disable(true);
+    // Initialize volume
+	_PLAYER_FUNCS.volumeSlider.setPosition(1);
+	// Initialize audio seek position
+    _PLAYER_FUNCS.seekHandleBox.setPosition(0);
+	// Disable the info button until something is loaded
+	_PLAYER_FUNCS.infoButton.disable(true);
 
-		_connectPlayerButtons();
-		_connectAudioEvents();
-		_renderPlaylistsList();
+	_connectPlayerButtons();
+	_connectAudioEvents();
+	_renderPlaylistsList();
 
-		return _WEB_AUDIO;
-	// }
-	// catch (err) {
-	// 	logger.error(err);
-	// 	logger.error('Failed to initiate the Web Audio Player :(');
-	// }
+	return _WEB_AUDIO;
 }
 
 /**
